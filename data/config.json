@@ -1,0 +1,13 @@
+{
+  "businessName": "Mini-Alimentation Nibona Emelyne",
+  "location": "Bujumbura, Burundi",
+  "exchangeRates": {
+    "bankRateFbuPerUsd": 2969.67,
+    "blackMarketRateFbuPerUsd": 4000
+  },
+  "investment": {
+    "totalInitialInvestmentFbu": 14700000,
+    "notes": "Equipment + working capital (corrected figure from the financial plan review). Update this if you invest more later."
+  },
+  "githubEditBaseUrl": "https://github.com/irumvaa/personal-pro-avec-papa-nicky/edit/main/data/"
+}
