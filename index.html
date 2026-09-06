@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mini-Alimentation Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="brand">
+      <h1 id="businessName">Mini-Alimentation</h1>
+      <p id="businessLocation">Bujumbura, Burundi</p>
+    </div>
+    <div class="controls">
+      <div>
+        <label for="monthSelect">Month</label>
+        <select id="monthSelect"></select>
+      </div>
+      <a class="edit-link" id="editLink" href="#" target="_blank" rel="noopener">Update this month's data</a>
+    </div>
+  </div>
+</div>
+
+<div class="demo-banner" id="demoBanner">
+  You're looking at example data. Edit the files in <code>data/</code> and add your real months — see README.md.
+</div>
+
+<div class="wrap">
+
+  <section class="kpis">
+    <div class="kpi-row" id="kpiRow"></div>
+  </section>
+
+  <section>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Revenue, expenses and profit over time</h3>
+        <canvas id="trendChart" height="220"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Investment recovery</h3>
+        <div class="recovery-pct" id="recoveryPct">0%</div>
+        <div class="recovery-bar-track">
+          <div class="recovery-bar-fill" id="recoveryBarFill" style="width:0%"></div>
+        </div>
+        <div class="recovery-figures">
+          <div>Invested: <strong id="recoveryInvested">-</strong></div>
+          <div>Recovered so far: <strong id="recoveryRecovered">-</strong></div>
+          <div class="muted">Remaining: <span id="recoveryRemaining">-</span></div>
+          <div class="muted" id="recoveryEta">-</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="grid-2">
+      <div class="panel">
+        <h3 id="productsTitle">Top products</h3>
+        <table class="ledger" id="productsTable">
+          <thead>
+            <tr><th></th><th>Product</th><th class="num">Revenue</th><th class="num">Profit</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h3 id="expenseTitle">Expense breakdown</h3>
+        <div class="expense-list" id="expenseList"></div>
+        <div class="reconcile-warning" id="reconcileWarning" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Full history</h2>
+      <span class="hint">Every month you've entered, side by side</span>
+    </div>
+    <button class="history-toggle" id="historyToggle">Show all months</button>
+    <div id="historyTableWrap">
+      <table class="ledger" id="historyTable">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th class="num">Revenue</th>
+            <th class="num">Gross profit</th>
+            <th class="num">Gross margin</th>
+            <th class="num">Net profit</th>
+            <th class="num">Net margin</th>
+            <th class="num">Receivables</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p id="footerNote">Figures in Burundian Francs (FBU), with USD estimates at bank and black market rates.</p>
+  </footer>
+
+</div>
+
+<script src="vendor/papaparse.min.js"></script>
+<script src="vendor/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
