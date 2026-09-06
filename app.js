@@ -289,6 +289,12 @@
       equipmentBreakdownHint: "From your own expense records (DEPENSES sheet)",
       ebColItem: "Item",
       ebColAmount: "Amount",
+      openingStockTitle: "Opening stock purchase",
+      openingStockHint: "The initial bulk purchase made before Cycle 1, from the STOCK INITIAL sheet",
+      osColProduct: "Product",
+      osColQty: "Quantity",
+      osColCost: "Amount spent",
+      osTotalLabel: "Total opening stock",
     },
     fr: {
       month: "Mois",
@@ -426,6 +432,12 @@
       equipmentBreakdownHint: "D'après vos propres registres de dépenses (feuille DEPENSES)",
       ebColItem: "Article",
       ebColAmount: "Montant",
+      openingStockTitle: "Achat du stock initial",
+      openingStockHint: "L'achat initial en gros effectué avant le Cycle 1, d'après la feuille STOCK INITIAL",
+      osColProduct: "Produit",
+      osColQty: "Quantité",
+      osColCost: "Montant dépensé",
+      osTotalLabel: "Total stock initial",
     },
   };
 
@@ -435,6 +447,7 @@
     expenses: [],
     products: [],
     notes: [],
+    initialStock: [],
     selectedIndex: -1,
     chart: null,
     trendsBigChart: null,
@@ -491,7 +504,8 @@
       fetchText("data/products.csv").then(parseCsv),
       fetchText("data/dictionary.json").then((t) => JSON.parse(t)).catch(() => ({})),
       fetchText("data/notes.csv").then(parseCsv).catch(() => []),
-    ]).then(([config, summaryRaw, expensesRaw, productsRaw, dictionary, notesRaw]) => {
+      fetchText("data/initial_stock.csv").then(parseCsv).catch(() => []),
+    ]).then(([config, summaryRaw, expensesRaw, productsRaw, dictionary, notesRaw, initialStockRaw]) => {
       state.config = config;
       glossary.dict = dictionary;
 
@@ -546,6 +560,15 @@
           worked: splitBullets(r.worked),
           notWorked: splitBullets(r.not_worked),
           actions: splitBullets(r.actions),
+        }));
+
+      state.initialStock = (initialStockRaw || [])
+        .filter((r) => r.product && r.product.trim())
+        .map((r) => ({
+          product: r.product.trim(),
+          quantity: (r.quantity || "").trim(),
+          cost: num(r.cost),
+          listedPrice: num(r.listed_price),
         }));
     });
   }
@@ -618,6 +641,11 @@
     document.getElementById("prColProduct").textContent = t("prColProduct");
     document.getElementById("prColQty").textContent = t("prColQty");
     document.getElementById("prColCost").textContent = t("prColCost");
+    document.getElementById("openingStockTitle").textContent = t("openingStockTitle");
+    document.getElementById("openingStockHint").textContent = t("openingStockHint");
+    document.getElementById("osColProduct").textContent = t("osColProduct");
+    document.getElementById("osColQty").textContent = t("osColQty");
+    document.getElementById("osColCost").textContent = t("osColCost");
 
     document.getElementById("trendsBigTitle").textContent = t("trendsBigTitle");
     document.getElementById("marginChartTitle").textContent = t("marginChartTitle");
@@ -1209,6 +1237,24 @@
   }
 
   function renderPurchasesTab() {
+    const osTbody = document.querySelector("#openingStockTable tbody");
+    osTbody.innerHTML = "";
+    if (state.initialStock.length) {
+      state.initialStock.forEach((p) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${renderTranslated(translateProductName(p.product))}</td>
+          <td class="num">${p.quantity || t("qtyNotRecorded")}</td>
+          <td class="num">${fmtFBU(p.cost)}</td>
+        `;
+        osTbody.appendChild(tr);
+      });
+      const totalTr = document.createElement("tr");
+      const total = state.initialStock.reduce((a, p) => a + p.cost, 0);
+      totalTr.innerHTML = `<td><strong>${t("osTotalLabel")}</strong></td><td></td><td class="num"><strong>${fmtFBU(total)}</strong></td>`;
+      osTbody.appendChild(totalTr);
+    }
+
     const tbody = document.querySelector("#purchasesTable tbody");
     tbody.innerHTML = "";
     if (!state.products.length) {
