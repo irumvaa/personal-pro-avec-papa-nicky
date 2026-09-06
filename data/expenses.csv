@@ -1,10 +1,4 @@
 month,category,amount
-Demo - Month 1,Rent,500000
-Demo - Month 1,Restocking,300000
-Demo - Month 1,Electricity,50000
-Demo - Month 1,Transport,50000
-Demo - Month 2,Rent,500000
-Demo - Month 2,Restocking,300000
-Demo - Month 2,Electricity,60000
-Demo - Month 2,Water,40000
-Demo - Month 2,Transport,50000
+Cycle 2 (12 Jul - 12 Aug 2026),Electricity,33000
+Cycle 2 (12 Jul - 12 Aug 2026),Salary,70000
+Cycle 2 (12 Jul - 12 Aug 2026),Staff meals,75000

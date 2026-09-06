@@ -1,3 +1,3 @@
 month,revenue,cogs,operating_expenses,receivables,notes
-Demo - Month 1,8000000,6500000,900000,300000,"Example row. Delete once you add your real months."
-Demo - Month 2,11280000,9100000,950000,420000,"Example row. Shows +41% revenue growth like a real strong month would."
+Cycle 1 (through 16 Jul 2026),3945000,3484000,0,0,"From RAPPORT_MINI_ALIMENATATION_7_16_2026.xlsx (sheet KURANGURA I). No operating expenses or receivables were itemized in this report. A separate spoilage loss of 18,000 FBU (3L milk + 3 loaves of bread) was noted in the source but not included in these figures."
+Cycle 2 (12 Jul - 12 Aug 2026),5572500,4533000,178000,86000,"From RAPPORT_MINI_ALIMENATATION_DU_12-08-2026.xlsx (sheet KURANGURA II). Operating expenses = electricity 33,000 + salary 70,000 + staff meals 75,000. Cash on hand at report date was 685,700 FBU (not tracked elsewhere in this dashboard)."
