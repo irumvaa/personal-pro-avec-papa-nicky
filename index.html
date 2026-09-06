@@ -15,6 +15,7 @@
   <div class="top-bar-inner">
     <div class="brand">
       <h1 id="businessName">Mini Alimentation</h1>
+      <p class="brand-sub" id="allTimeLabel">All-time totals, across every month recorded</p>
     </div>
     <div class="controls">
       <div class="lang-toggle" id="langToggle">
@@ -25,15 +26,11 @@
         <input type="checkbox" id="showOriginalToggle" />
         <span id="showOriginalLabel">Show original names</span>
       </label>
-      <div>
-        <label for="monthSelect" id="monthLabel">Month</label>
-        <select id="monthSelect"></select>
-      </div>
-      <a class="edit-link" id="editLink" href="#" target="_blank" rel="noopener">Update this month's data</a>
     </div>
   </div>
   <div class="tab-bar" id="tabBar">
     <button class="tab-btn active" data-tab="overview" id="tabBtnOverview">Overview</button>
+    <button class="tab-btn" data-tab="monthly" id="tabBtnMonthly">Monthly Detail</button>
     <button class="tab-btn" data-tab="trends" id="tabBtnTrends">Trends</button>
     <button class="tab-btn" data-tab="investment" id="tabBtnInvestment">Investment Recovery</button>
     <button class="tab-btn" data-tab="products" id="tabBtnProducts">Products</button>
@@ -49,7 +46,7 @@
 
 <div class="wrap">
 
-  <!-- ============ OVERVIEW TAB ============ -->
+  <!-- ============ OVERVIEW TAB (aggregate, all months) ============ -->
   <div class="tab-panel active" id="panel-overview">
 
     <section class="kpis">
@@ -81,7 +78,7 @@
     <section>
       <div class="grid-2">
         <div class="panel">
-          <h3 id="productsTitle">Top products</h3>
+          <h3 id="productsTitle">Top products (all-time)</h3>
           <table class="ledger" id="productsTable">
             <thead>
               <tr><th></th><th id="colProductHead">Product</th><th class="num" id="colRevenueHead">Revenue</th><th class="num" id="colProfitHead">Profit</th></tr>
@@ -90,7 +87,7 @@
           </table>
         </div>
         <div class="panel">
-          <h3 id="expenseTitle">Expense breakdown</h3>
+          <h3 id="expenseTitle">Expense breakdown (all-time)</h3>
           <div class="expense-list" id="expenseList"></div>
           <div class="reconcile-warning" id="reconcileWarning" style="display:none;"></div>
         </div>
@@ -121,6 +118,64 @@
       </div>
     </section>
 
+  </div>
+
+  <!-- ============ MONTHLY DETAIL TAB (per-month drill down) ============ -->
+  <div class="tab-panel" id="panel-monthly">
+    <div class="subtab-bar" id="subtabBar"></div>
+
+    <section class="kpis">
+      <div class="kpi-row" id="mKpiRow"></div>
+    </section>
+
+    <section>
+      <div class="grid-2">
+        <div class="panel">
+          <h3 id="mProductsTitle">Top products</h3>
+          <table class="ledger" id="mProductsTable">
+            <thead>
+              <tr><th></th><th id="mColProduct">Product</th><th class="num" id="mColRevenue">Revenue</th><th class="num" id="mColProfit">Profit</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h3 id="mExpenseTitle">Expense breakdown</h3>
+          <div class="expense-list" id="mExpenseList"></div>
+          <div class="reconcile-warning" id="mReconcileWarning" style="display:none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="panel">
+        <h3 id="mPlTitle">Profit &amp; Loss statement</h3>
+        <table class="ledger pl-table" id="mPlTable">
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2 id="notesTitle">Notes for this month</h2>
+        <span class="hint" id="notesHint">Filled in at the end of each month, in data/notes.csv</span>
+      </div>
+      <div class="notes-grid">
+        <div class="notes-box notes-worked">
+          <h4 id="workedTitle">What worked</h4>
+          <ul id="workedList"></ul>
+        </div>
+        <div class="notes-box notes-not-worked">
+          <h4 id="notWorkedTitle">What didn't work</h4>
+          <ul id="notWorkedList"></ul>
+        </div>
+        <div class="notes-box notes-actions">
+          <h4 id="actionsTitle">Actions for next month</h4>
+          <ul id="actionsList"></ul>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- ============ TRENDS TAB ============ -->
@@ -218,7 +273,7 @@
     </section>
   </div>
 
-  <!-- ============ PRODUCTS TAB ============ -->
+  <!-- ============ PRODUCTS TAB (all-time aggregate) ============ -->
   <div class="tab-panel" id="panel-products">
     <section>
       <div class="section-head">
@@ -234,7 +289,7 @@
     </section>
     <section>
       <div class="panel">
-        <h3 id="fullProductsTitle">All products</h3>
+        <h3 id="fullProductsTitle">All products (all-time)</h3>
         <table class="ledger" id="fullProductsTable">
           <thead>
             <tr><th></th><th id="fpColProduct">Product</th><th class="num" id="fpColQty">Quantity</th><th class="num" id="fpColCost">Bought (cost)</th><th class="num" id="fpColRevenue">Sold for</th><th class="num" id="fpColProfit">Profit</th><th class="num" id="fpColMargin">Margin</th></tr>
@@ -243,33 +298,13 @@
         </table>
       </div>
     </section>
-    <section>
-      <div class="section-head">
-        <h2 id="notesTitle">Notes for this month</h2>
-        <span class="hint" id="notesHint">Filled in at the end of each month, in data/notes.csv</span>
-      </div>
-      <div class="notes-grid">
-        <div class="notes-box notes-worked">
-          <h4 id="workedTitle">What worked</h4>
-          <ul id="workedList"></ul>
-        </div>
-        <div class="notes-box notes-not-worked">
-          <h4 id="notWorkedTitle">What didn't work</h4>
-          <ul id="notWorkedList"></ul>
-        </div>
-        <div class="notes-box notes-actions">
-          <h4 id="actionsTitle">Actions for next month</h4>
-          <ul id="actionsList"></ul>
-        </div>
-      </div>
-    </section>
   </div>
 
-  <!-- ============ PROFIT & LOSS TAB ============ -->
+  <!-- ============ PROFIT & LOSS TAB (all-time combined) ============ -->
   <div class="tab-panel" id="panel-pl">
     <section>
       <div class="panel">
-        <h3 id="plTitle">Profit &amp; Loss statement</h3>
+        <h3 id="plTitle">Profit &amp; Loss statement (all-time)</h3>
         <table class="ledger pl-table" id="plTable">
           <tbody></tbody>
         </table>

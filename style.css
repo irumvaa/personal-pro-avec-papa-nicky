@@ -60,6 +60,7 @@ a { color: var(--forest-deep); }
   color: #C9D6C7;
   font-size: 0.92rem;
 }
+.brand-sub { font-size: 0.8rem !important; opacity: 0.85; }
 .controls {
   display: flex;
   align-items: center;
@@ -229,6 +230,34 @@ select#monthSelect {
 .pl-table tr.pl-highlight td.num { font-family: var(--font-num); }
 .pl-table td.num { text-align: right; }
 .pl-table td.pl-note { color: var(--ink-soft); font-size: 0.8rem; font-style: italic; }
+
+/* ---------- Monthly Detail subtabs ---------- */
+.subtab-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.subtab-btn {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  background: var(--card-bg);
+  color: var(--ink-soft);
+  border: 1px solid var(--paper-line);
+  border-radius: 16px;
+  padding: 7px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.subtab-btn:hover { background: #EFEDE2; }
+.subtab-btn.active {
+  background: var(--forest);
+  color: #F4F2E9;
+  border-color: var(--forest);
+  font-weight: 600;
+}
 
 /* ---------- Demo banner ---------- */
 .demo-banner {
