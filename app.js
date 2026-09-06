@@ -1,6 +1,134 @@
 (function () {
   "use strict";
 
+  // ---------- FR/Kirundi -> English glossary matching ----------
+  const glossary = {
+    dict: null, // loaded from data/dictionary.json
+    cache: new Map(),
+  };
+
+  function stripDiacritics(s) {
+    return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function baseKey(raw) {
+    let s = stripDiacritics(String(raw).toUpperCase());
+    s = s.replace(/[^A-Z0-9 ]+/g, " ");
+    s = s.replace(/\s+/g, " ").trim();
+    s = s.replace(/(\d+)$/, "").trim(); // strip trailing qty/size digits
+    return s;
+  }
+
+  // Detects a trailing size token (Grand/Petit or G/P/PT) and strips it separately,
+  // so "KANDI PT" and "OMO DOFI G" still hit the base dictionary entry.
+  function splitSize(key) {
+    const tokens = key.split(" ");
+    const last = tokens[tokens.length - 1];
+    if (["GRAND", "G"].includes(last) && tokens.length > 1) {
+      return { base: tokens.slice(0, -1).join(" "), size: "large" };
+    }
+    if (["PETIT", "P", "PT"].includes(last) && tokens.length > 1) {
+      return { base: tokens.slice(0, -1).join(" "), size: "small" };
+    }
+    return { base: key, size: null };
+  }
+
+  function levenshtein(a, b) {
+    const m = a.length, n = b.length;
+    if (m === 0) return n;
+    if (n === 0) return m;
+    const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    for (let i = 1; i <= m; i++) {
+      for (let j = 1; j <= n; j++) {
+        dp[i][j] = a[i - 1] === b[j - 1]
+          ? dp[i - 1][j - 1]
+          : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+      }
+    }
+    return dp[m][n];
+  }
+
+  function fuzzyLookup(key) {
+    if (!glossary.dict) return null;
+    let best = null;
+    let bestDist = Infinity;
+    for (const dictKey of Object.keys(glossary.dict)) {
+      const threshold = dictKey.length <= 5 ? 1 : 2;
+      const dist = levenshtein(key, dictKey);
+      if (dist <= threshold && dist < bestDist) {
+        best = dictKey;
+        bestDist = dist;
+      }
+    }
+    return best;
+  }
+
+  const STRIPPABLE_PREFIXES = ["EAU ", "JUS "];
+
+  function stripKnownPrefix(key) {
+    for (const p of STRIPPABLE_PREFIXES) {
+      if (key.startsWith(p) && key.length > p.length) return key.slice(p.length);
+    }
+    return null;
+  }
+
+  // Returns { text, confidence: 'high'|'brand'|'medium'|'low'|'none', original }
+  function translateProductName(raw) {
+    const original = String(raw).trim();
+    if (glossary.cache.has(original)) return glossary.cache.get(original);
+
+    const key = baseKey(original);
+    const { base, size } = splitSize(key);
+    const sizeSuffix = size === "large" ? " (large)" : size === "small" ? " (small)" : "";
+
+    // Build an ordered list of candidate keys to try: the size-stripped base,
+    // the raw key, and both of those again with a leading EAU/JUS stripped.
+    const candidates = [base, key];
+    const strippedBase = stripKnownPrefix(base);
+    const strippedKey = stripKnownPrefix(key);
+    if (strippedBase) candidates.push(strippedBase);
+    if (strippedKey) candidates.push(strippedKey);
+
+    let result = null;
+    for (const cand of candidates) {
+      if (glossary.dict && glossary.dict[cand]) {
+        const [en, confidence] = glossary.dict[cand];
+        result = { text: en + (confidence === "brand" || confidence === "high" ? sizeSuffix : ""), confidence, original };
+        break;
+      }
+    }
+
+    if (!result) {
+      let fuzzyKey = null;
+      for (const cand of candidates) {
+        fuzzyKey = fuzzyLookup(cand);
+        if (fuzzyKey) break;
+      }
+      if (fuzzyKey) {
+        const [en, confidence] = glossary.dict[fuzzyKey];
+        const downgraded = confidence === "high" || confidence === "brand" ? "medium" : confidence;
+        result = { text: en + sizeSuffix, confidence: downgraded, original };
+      } else {
+        result = { text: original, confidence: "none", original };
+      }
+    }
+    glossary.cache.set(original, result);
+    return result;
+  }
+
+  function renderTranslated(t) {
+    const isUncertain = t.confidence === "medium" || t.confidence === "low" || t.confidence === "none";
+    const cls = isUncertain ? ' class="uncertain-term"' : "";
+    const titleAttr = isUncertain
+      ? ` title="${t.confidence === "none" ? "Not recognized — showing original text" : "Approximate translation, original: " + t.original}"`
+      : "";
+    const showOriginal = state.showOriginal && t.text !== t.original;
+    const suffix = showOriginal ? ` <span class="orig-suffix">(${t.original})</span>` : "";
+    return `<span${cls}${titleAttr}>${t.text}</span>${suffix}`;
+  }
+
+
   const TRANSLATIONS = {
     en: {
       month: "Month",
@@ -49,6 +177,7 @@
       errorLoad: (msg) => `Could not load the dashboard data. ${msg}`,
       bank: "bank",
       blackMarket: "black market",
+      showOriginalLabel: "Show original names",
     },
     fr: {
       month: "Mois",
@@ -97,6 +226,7 @@
       errorLoad: (msg) => `Impossible de charger les données du tableau de bord. ${msg}`,
       bank: "banque",
       blackMarket: "marché parallèle",
+      showOriginalLabel: "Afficher les noms d'origine",
     },
   };
 
@@ -108,6 +238,7 @@
     selectedIndex: -1,
     chart: null,
     lang: localStorage.getItem("dashboardLang") || "en",
+    showOriginal: localStorage.getItem("dashboardShowOriginal") === "true",
   };
 
   function t(key, ...args) {
@@ -153,8 +284,10 @@
       fetchText("data/summary.csv").then(parseCsv),
       fetchText("data/expenses.csv").then(parseCsv),
       fetchText("data/products.csv").then(parseCsv),
-    ]).then(([config, summaryRaw, expensesRaw, productsRaw]) => {
+      fetchText("data/dictionary.json").then((t) => JSON.parse(t)).catch(() => ({})),
+    ]).then(([config, summaryRaw, expensesRaw, productsRaw, dictionary]) => {
       state.config = config;
+      glossary.dict = dictionary;
 
       state.summary = summaryRaw
         .filter((r) => r.month && r.month.trim())
@@ -243,6 +376,9 @@
       btn.classList.toggle("active", btn.dataset.lang === state.lang);
     });
     document.documentElement.lang = state.lang;
+
+    const origLabel = document.getElementById("showOriginalLabel");
+    if (origLabel) origLabel.textContent = t("showOriginalLabel");
   }
 
   function populateHeader() {
@@ -384,9 +520,10 @@
     }
     rows.forEach((p, i) => {
       const tr = document.createElement("tr");
+      const translated = translateProductName(p.product);
       tr.innerHTML = `
         <td class="rank">${i + 1}</td>
-        <td>${p.product}</td>
+        <td>${renderTranslated(translated)}</td>
         <td class="num">${p.revenue ? fmtFBU(p.revenue) : "-"}</td>
         <td class="num">${fmtFBU(p.profit)}</td>
       `;
@@ -409,8 +546,9 @@
       rows.forEach((r) => {
         const div = document.createElement("div");
         div.className = "expense-row";
+        const translated = translateProductName(r.category);
         div.innerHTML = `
-          <div class="cat">${r.category}</div>
+          <div class="cat">${renderTranslated(translated)}</div>
           <div class="expense-bar-track"><div class="expense-bar-fill" style="width:${(r.amount / max) * 100}%"></div></div>
           <div class="amt">${fmtFBU(r.amount)}</div>
         `;
@@ -474,6 +612,16 @@
       renderAll();
     });
   });
+
+  const origToggle = document.getElementById("showOriginalToggle");
+  if (origToggle) {
+    origToggle.checked = state.showOriginal;
+    origToggle.addEventListener("change", () => {
+      state.showOriginal = origToggle.checked;
+      localStorage.setItem("dashboardShowOriginal", String(state.showOriginal));
+      renderAll();
+    });
+  }
 
   loadAll()
     .then(() => {

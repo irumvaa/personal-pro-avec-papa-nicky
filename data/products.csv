@@ -1,17 +1,17 @@
 month,product,revenue,profit
-Cycle 1 (through 16 Jul 2026),Sugar (Sucre),2612500,223500
-Cycle 1 (through 16 Jul 2026),Ikivuguto (fermented milk drink),150000,42000
-Cycle 1 (through 16 Jul 2026),Aquavie (bottled water),297000,32000
-Cycle 1 (through 16 Jul 2026),Fanta,240000,29500
-Cycle 1 (through 16 Jul 2026),Lux Juice,60000,17000
-Cycle 1 (through 16 Jul 2026),Natura Milk (Lait Natura),60000,16000
-Cycle 1 (through 16 Jul 2026),Belle Saveur Water (small),60000,13500
-Cycle 1 (through 16 Jul 2026),Belle Saveur Water (large),60000,13500
-Cycle 2 (12 Jul - 12 Aug 2026),Belle Saveur Water,1236000,356000
-Cycle 2 (12 Jul - 12 Aug 2026),Sugar (Sucre),1141500,113500
-Cycle 2 (12 Jul - 12 Aug 2026),Ikivuguto (fermented milk drink),276000,78000
-Cycle 2 (12 Jul - 12 Aug 2026),Aquavie (bottled water),567000,63000
-Cycle 2 (12 Jul - 12 Aug 2026),Totahara Porridge (Bouillie Totahara),290000,50000
-Cycle 2 (12 Jul - 12 Aug 2026),Beignet - fried dough (source said "Baigne"),180000,30000
-Cycle 2 (12 Jul - 12 Aug 2026),Fursana Juice,96000,28000
-Cycle 2 (12 Jul - 12 Aug 2026),Kinju (bottled water),126000,22000
+Cycle 1 (through 16 Jul 2026),SUCRE,2612500,223500
+Cycle 1 (through 16 Jul 2026),IKIVUGUTO,150000,42000
+Cycle 1 (through 16 Jul 2026),AQUAVIE,297000,32000
+Cycle 1 (through 16 Jul 2026),FANTA,240000,29500
+Cycle 1 (through 16 Jul 2026),LUX JUICE,60000,17000
+Cycle 1 (through 16 Jul 2026),LAIT NATURA,60000,16000
+Cycle 1 (through 16 Jul 2026),BELLE SAVEUR P,60000,13500
+Cycle 1 (through 16 Jul 2026),BELLE SAVEUR G,60000,13500
+Cycle 2 (12 Jul - 12 Aug 2026),BELLE SAVEUR,1236000,356000
+Cycle 2 (12 Jul - 12 Aug 2026),SUCRE,1141500,113500
+Cycle 2 (12 Jul - 12 Aug 2026),IKIVUGUTO,276000,78000
+Cycle 2 (12 Jul - 12 Aug 2026),AQUAVIE,567000,63000
+Cycle 2 (12 Jul - 12 Aug 2026),BOUILLIE TOTAHARA,290000,50000
+Cycle 2 (12 Jul - 12 Aug 2026),BAIGNE,180000,30000
+Cycle 2 (12 Jul - 12 Aug 2026),JUS FURSANA,96000,28000
+Cycle 2 (12 Jul - 12 Aug 2026),KINJU,126000,22000

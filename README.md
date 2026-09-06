@@ -84,6 +84,35 @@ Update this only when:
 4. Every time you commit a change to a file in `data/`, the live page
    updates automatically within a minute or two.
 
+### `data/dictionary.json` — the translation glossary
+
+Product names and expense categories can be typed in French or Kirundi
+exactly as your reports have them — the dashboard translates them to
+English automatically when it displays them. It also understands common
+typos and variants (`BAINGNE` vs `BAIGNE`, `SUCRE1` vs `SUCRE`, `EAU
+AQUAVIE` vs `AQUAVIE`) using fuzzy matching, and strips size markers
+(`G`/`GRAND`, `P`/`PT`/`PETIT`) automatically.
+
+If a term isn't recognized, or the match is only approximate, the
+dashboard shows it with a dotted underline — hover over it to see why.
+Anything it can't match at all is shown in its original language rather
+than guessed at. The "Show original names" checkbox next to the language
+toggle reveals the original text next to every translated term, so you
+can always double-check.
+
+To add a new term or fix a wrong one, edit `data/dictionary.json`. Each
+entry looks like:
+
+```json
+"SUCRE": ["Sugar", "high"]
+```
+
+The key is the term in capital letters (accents and punctuation don't
+matter, the matcher normalizes them). The confidence level is one of:
+`"high"` (a clear translation), `"brand"` (a brand name kept as-is with
+a short description), `"medium"` or `"low"` (best guess — flagged in the
+dashboard so you know to double check it).
+
 ## Removing the demo data
 
 The two "Demo - Month 1" / "Demo - Month 2" rows in the CSV files are

@@ -114,6 +114,26 @@ select#monthSelect {
 }
 .lang-btn:hover:not(.active) { background: #24564A; color: #F4F2E9; }
 
+.orig-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #C9D6C7;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.orig-toggle input { accent-color: var(--marigold); cursor: pointer; }
+
+.uncertain-term {
+  border-bottom: 1px dotted var(--clay-red);
+  cursor: help;
+}
+.orig-suffix {
+  color: var(--ink-soft);
+  font-size: 0.85em;
+}
+
 /* ---------- Demo banner ---------- */
 .demo-banner {
   background: #FBEBD3;

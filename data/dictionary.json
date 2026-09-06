@@ -1,0 +1,546 @@
+{
+  "ABC DENT": [
+    "ABC Dent (toothpaste brand)",
+    "brand"
+  ],
+  "AKEZAMUTIMA": [
+    "Akeza Mutima (\"pleases the heart\")",
+    "medium"
+  ],
+  "AMAJANE": [
+    "Unknown item (\"amajane\")",
+    "low"
+  ],
+  "ANNY": [
+    "Anny (brand)",
+    "medium"
+  ],
+  "APPLE": [
+    "Apple",
+    "high"
+  ],
+  "AQUAVI": [
+    "Aquavie (bottled water brand)",
+    "brand"
+  ],
+  "AQUAVIE": [
+    "Aquavie (bottled water brand)",
+    "brand"
+  ],
+  "AQUAVIE CITRON": [
+    "Aquavie Lemon (bottled water brand)",
+    "brand"
+  ],
+  "ARACHIDES": [
+    "Peanuts",
+    "high"
+  ],
+  "ATTACK": [
+    "Attack (detergent brand)",
+    "brand"
+  ],
+  "BAIGNE": [
+    "Beignet - fried dough (tentative translation)",
+    "low"
+  ],
+  "BAIGNET": [
+    "Beignet - fried dough (tentative translation)",
+    "low"
+  ],
+  "BAINGNE": [
+    "Beignet - fried dough (tentative translation)",
+    "low"
+  ],
+  "BAYGON": [
+    "Baygon (insecticide brand)",
+    "brand"
+  ],
+  "BELLE SAVEUR": [
+    "Belle Saveur Water (\"Good Flavor\")",
+    "brand"
+  ],
+  "BEST TANGAWIZI": [
+    "Best Ginger Soda (\"tangawizi\" = ginger)",
+    "medium"
+  ],
+  "BOMBO BIG": [
+    "Bombo, large (local snack)",
+    "low"
+  ],
+  "BOMBO SIMPLE": [
+    "Bombo, plain (local snack)",
+    "low"
+  ],
+  "BOUILLIE NICE": [
+    "Nice Porridge Flour (brand)",
+    "brand"
+  ],
+  "BOUILLIE TOTAHARA": [
+    "Totahara Porridge Flour (brand)",
+    "brand"
+  ],
+  "BROSSE A DENT": [
+    "Toothbrush",
+    "high"
+  ],
+  "BROSSE A DENT PT": [
+    "Toothbrush (small)",
+    "high"
+  ],
+  "BROSSE A DENT SMART": [
+    "Toothbrush (Smart brand)",
+    "brand"
+  ],
+  "CAISSE COMPTOIRE": [
+    "Cash register",
+    "high"
+  ],
+  "CHOCOLATE": [
+    "Chocolate",
+    "high"
+  ],
+  "CHOCOLATE GASUKU": [
+    "Gasuku Chocolate (brand)",
+    "brand"
+  ],
+  "CHOCOLATE NITRO": [
+    "Nitro Chocolate (brand)",
+    "brand"
+  ],
+  "COCA": [
+    "Coca-Cola",
+    "brand"
+  ],
+  "COCA COLA": [
+    "Coca-Cola",
+    "brand"
+  ],
+  "COMMUNICATION": [
+    "Communication",
+    "high"
+  ],
+  "DETOL": [
+    "Dettol (antiseptic brand)",
+    "brand"
+  ],
+  "DETOL MIX": [
+    "Dettol Mix (antiseptic brand)",
+    "brand"
+  ],
+  "DETTES A RECOUVRIR": [
+    "Debts to recover (receivables)",
+    "high"
+  ],
+  "DIVERS": [
+    "Miscellaneous",
+    "high"
+  ],
+  "EAU": [
+    "Water",
+    "high"
+  ],
+  "EAU B SAVEUR": [
+    "Belle Saveur Water (\"Good Flavor\")",
+    "brand"
+  ],
+  "EAU KANDI": [
+    "Kandi Water (bottled water brand)",
+    "brand"
+  ],
+  "ELECTRICITE": [
+    "Electricity",
+    "high"
+  ],
+  "EMBE": [
+    "Mango",
+    "high"
+  ],
+  "ENERGIE": [
+    "Energie (soda brand)",
+    "brand"
+  ],
+  "ENTRETIEN": [
+    "Maintenance",
+    "high"
+  ],
+  "ENTRETIEN MATERIEL": [
+    "Equipment maintenance",
+    "high"
+  ],
+  "ENVELOPPE": [
+    "Envelope",
+    "high"
+  ],
+  "FANTA": [
+    "Fanta (soda brand)",
+    "brand"
+  ],
+  "FARINE": [
+    "Flour",
+    "high"
+  ],
+  "FRAIS": [
+    "Fees",
+    "high"
+  ],
+  "FURSANA": [
+    "Fursana (tamarind juice brand)",
+    "brand"
+  ],
+  "GO FRESH": [
+    "Go-Fresh (juice brand)",
+    "brand"
+  ],
+  "GO FRESH CARTO": [
+    "Go-Fresh (juice brand, carton)",
+    "brand"
+  ],
+  "HARICOTS": [
+    "Beans",
+    "high"
+  ],
+  "HUILE": [
+    "Cooking oil",
+    "high"
+  ],
+  "IFYUFYU": [
+    "Unknown item (\"ifyufyu\")",
+    "low"
+  ],
+  "IKIVUGUTO": [
+    "Ikivuguto (fermented milk drink)",
+    "high"
+  ],
+  "IMPREVUES": [
+    "Contingency",
+    "high"
+  ],
+  "IMPREVUS": [
+    "Contingency",
+    "high"
+  ],
+  "INTERNET": [
+    "Internet",
+    "high"
+  ],
+  "IVORI": [
+    "Ivory (soap brand)",
+    "brand"
+  ],
+  "JEX": [
+    "Jex (dish soap brand)",
+    "brand"
+  ],
+  "JIBU": [
+    "Jibu (bottled water brand)",
+    "brand"
+  ],
+  "JIBU GRAND": [
+    "Jibu (bottled water brand, large)",
+    "brand"
+  ],
+  "JIBU PETIT": [
+    "Jibu (bottled water brand, small)",
+    "brand"
+  ],
+  "JOJO": [
+    "Jojo (soap/lotion brand)",
+    "brand"
+  ],
+  "JOJO BIG BOSS": [
+    "Jojo Big Boss (brand variant)",
+    "brand"
+  ],
+  "JUS": [
+    "Juice",
+    "high"
+  ],
+  "JUS AKEZA MUTIMA": [
+    "Akeza Mutima Juice (\"pleases the heart\")",
+    "medium"
+  ],
+  "JUS APPLE": [
+    "Apple Juice",
+    "high"
+  ],
+  "JUS FURSANA": [
+    "Fursana Juice",
+    "brand"
+  ],
+  "JUS MIRINDA": [
+    "Mirinda Juice",
+    "brand"
+  ],
+  "KANDI": [
+    "Kandi (bottled water brand)",
+    "brand"
+  ],
+  "KANTA RADIA": [
+    "Kanta Radia (brand)",
+    "low"
+  ],
+  "KINJU": [
+    "Kinju (bottled water brand)",
+    "brand"
+  ],
+  "KIRIDA": [
+    "Kirida (brand)",
+    "medium"
+  ],
+  "KISMART": [
+    "Kismart (brand)",
+    "medium"
+  ],
+  "LAIT": [
+    "Milk",
+    "high"
+  ],
+  "LAIT NATURA": [
+    "Natura Milk",
+    "brand"
+  ],
+  "LAIT NON EMB": [
+    "Unpackaged milk",
+    "high"
+  ],
+  "LAIT VANILLE": [
+    "Vanilla milk",
+    "high"
+  ],
+  "LED GOLD": [
+    "LED Gold (brand)",
+    "low"
+  ],
+  "LISSA TOMATE": [
+    "Lissa Tomato Paste (brand)",
+    "brand"
+  ],
+  "LOYER": [
+    "Rent",
+    "high"
+  ],
+  "LUMICASH": [
+    "Lumicash (mobile money service)",
+    "brand"
+  ],
+  "LUX JUICE": [
+    "Lux Juice",
+    "brand"
+  ],
+  "MAGI": [
+    "Maggi (bouillon cube brand)",
+    "brand"
+  ],
+  "MAIS": [
+    "Maize (corn)",
+    "high"
+  ],
+  "MALTI": [
+    "Malti (malt drink brand)",
+    "brand"
+  ],
+  "MALTI CAFEE P": [
+    "Malti Coffee (malt drink brand, small)",
+    "brand"
+  ],
+  "MALTI GRAND": [
+    "Malti (malt drink brand, large)",
+    "brand"
+  ],
+  "MALTI PETIT": [
+    "Malti (malt drink brand, small)",
+    "brand"
+  ],
+  "MAMY LOVE": [
+    "Mamy Love (baby formula brand)",
+    "brand"
+  ],
+  "MATNAT": [
+    "Matnat (brand)",
+    "medium"
+  ],
+  "MAYA": [
+    "Maya (diaper brand)",
+    "brand"
+  ],
+  "MIEL": [
+    "Honey",
+    "high"
+  ],
+  "MIRINDA": [
+    "Mirinda (soda brand)",
+    "brand"
+  ],
+  "NOVIDA": [
+    "Novida (soda brand)",
+    "brand"
+  ],
+  "OMO": [
+    "Omo (detergent brand)",
+    "brand"
+  ],
+  "OMO DOFI": [
+    "Omo Dofi (detergent variant)",
+    "brand"
+  ],
+  "OMO TOSSI": [
+    "Omo Tossi (detergent variant)",
+    "brand"
+  ],
+  "ORANGE": [
+    "Orange",
+    "high"
+  ],
+  "OSCAR": [
+    "Oscar (biscuit brand)",
+    "brand"
+  ],
+  "P MOUCHOIR": [
+    "Tissue packet",
+    "high"
+  ],
+  "PAIN": [
+    "Bread",
+    "high"
+  ],
+  "PAIN COUPE": [
+    "Sliced bread",
+    "high"
+  ],
+  "PAMPERS MAYA": [
+    "Pampers (Maya variant)",
+    "brand"
+  ],
+  "PARLE G": [
+    "Parle-G (biscuit brand)",
+    "brand"
+  ],
+  "REAPPROVISIONNEMENT": [
+    "Restocking",
+    "high"
+  ],
+  "REPAS": [
+    "Meals",
+    "high"
+  ],
+  "REPAS POUR SALARIE": [
+    "Staff meals",
+    "high"
+  ],
+  "RIZ": [
+    "Rice",
+    "high"
+  ],
+  "SACHET": [
+    "Sachet (small bag)",
+    "high"
+  ],
+  "SALAIRE": [
+    "Salary",
+    "high"
+  ],
+  "SALSA": [
+    "Salsa (brand)",
+    "medium"
+  ],
+  "SANTA LUCIA": [
+    "Santa Lucia (biscuit brand)",
+    "brand"
+  ],
+  "SAV MUGANGA": [
+    "\"Doctor\" Soap (\"muganga\" = healer/doctor)",
+    "medium"
+  ],
+  "SAV0N SIMPLE": [
+    "Plain soap",
+    "high"
+  ],
+  "SAVON": [
+    "Soap",
+    "high"
+  ],
+  "SAVON SHAZA": [
+    "Shaza Soap (brand)",
+    "brand"
+  ],
+  "SAVONOR": [
+    "Savonor (soap brand)",
+    "brand"
+  ],
+  "SEL": [
+    "Salt",
+    "high"
+  ],
+  "SERVIETTE": [
+    "Sanitary pad / towel",
+    "medium"
+  ],
+  "SOFCARE": [
+    "Sofcare (hygiene brand)",
+    "brand"
+  ],
+  "SOLIX": [
+    "Solix (cleaning brand)",
+    "brand"
+  ],
+  "SORWATOM": [
+    "Sorwatom (soda brand)",
+    "brand"
+  ],
+  "SUCRE": [
+    "Sugar",
+    "high"
+  ],
+  "SUPAGETTI": [
+    "Instant noodles (\"Supagetti\")",
+    "medium"
+  ],
+  "SUPER BLUE": [
+    "Super Blue (laundry bluing agent)",
+    "brand"
+  ],
+  "SUPER GLUE": [
+    "Super Glue",
+    "high"
+  ],
+  "TOP": [
+    "Top (soda brand)",
+    "brand"
+  ],
+  "TRANSPORT": [
+    "Transport",
+    "high"
+  ],
+  "TROPICAL": [
+    "Tropical (soda brand)",
+    "brand"
+  ],
+  "UBUYI AKARYOSHE": [
+    "Unknown item (\"ubuyi akaryoshe\")",
+    "low"
+  ],
+  "UDI": [
+    "Udi (soda brand)",
+    "brand"
+  ],
+  "VICO": [
+    "Vico (bouillon cube brand)",
+    "brand"
+  ],
+  "VIM": [
+    "Vim (cleaning brand)",
+    "brand"
+  ],
+  "WHIDENT": [
+    "Whitedent (toothpaste brand)",
+    "brand"
+  ],
+  "WHITDENT": [
+    "Whitedent (toothpaste brand)",
+    "brand"
+  ],
+  "YAOURTE": [
+    "Yogurt",
+    "high"
+  ]
+}
