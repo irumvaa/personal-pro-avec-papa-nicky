@@ -205,11 +205,23 @@
   <!-- ============ PRODUCTS TAB ============ -->
   <div class="tab-panel" id="panel-products">
     <section>
+      <div class="section-head">
+        <h2 id="bestSellersTitle">Top 10 best sellers overall</h2>
+        <span class="hint" id="bestSellersHint">Ranked by total revenue across every month recorded</span>
+      </div>
+      <table class="ledger" id="bestSellersTable">
+        <thead>
+          <tr><th></th><th id="bsColProduct">Product</th><th class="num" id="bsColQty">Quantity</th><th class="num" id="bsColCost">Bought (cost)</th><th class="num" id="bsColRevenue">Sold for</th><th class="num" id="bsColProfit">Profit</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+    <section>
       <div class="panel">
         <h3 id="fullProductsTitle">All products</h3>
         <table class="ledger" id="fullProductsTable">
           <thead>
-            <tr><th></th><th id="fpColProduct">Product</th><th class="num" id="fpColRevenue">Revenue</th><th class="num" id="fpColProfit">Profit</th><th class="num" id="fpColMargin">Margin</th></tr>
+            <tr><th></th><th id="fpColProduct">Product</th><th class="num" id="fpColQty">Quantity</th><th class="num" id="fpColCost">Bought (cost)</th><th class="num" id="fpColRevenue">Sold for</th><th class="num" id="fpColProfit">Profit</th><th class="num" id="fpColMargin">Margin</th></tr>
           </thead>
           <tbody></tbody>
         </table>

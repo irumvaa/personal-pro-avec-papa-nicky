@@ -73,7 +73,7 @@
     return null;
   }
 
-  // Returns { text, confidence: 'high'|'brand'|'medium'|'low'|'none', original }
+  // Returns { text, confidence: 'high'|'brand'|'medium'|'low'|'none', original, groupKey }
   function translateProductName(raw) {
     const original = String(raw).trim();
     if (glossary.cache.has(original)) return glossary.cache.get(original);
@@ -94,7 +94,7 @@
     for (const cand of candidates) {
       if (glossary.dict && glossary.dict[cand]) {
         const [en, confidence] = glossary.dict[cand];
-        result = { text: en + (confidence === "brand" || confidence === "high" ? sizeSuffix : ""), confidence, original };
+        result = { text: en + (confidence === "brand" || confidence === "high" ? sizeSuffix : ""), confidence, original, groupKey: cand };
         break;
       }
     }
@@ -108,9 +108,11 @@
       if (fuzzyKey) {
         const [en, confidence] = glossary.dict[fuzzyKey];
         const downgraded = confidence === "high" || confidence === "brand" ? "medium" : confidence;
-        result = { text: en + sizeSuffix, confidence: downgraded, original };
+        result = { text: en + sizeSuffix, confidence: downgraded, original, groupKey: fuzzyKey };
       } else {
-        result = { text: original, confidence: "none", original };
+        // No dictionary match at all: group by the size-stripped base so at
+        // least exact-spelling repeats (and digit/size variants) still merge.
+        result = { text: original, confidence: "none", original, groupKey: base };
       }
     }
     glossary.cache.set(original, result);
@@ -128,6 +130,27 @@
     return `<span${cls}${titleAttr}>${t.text}</span>${suffix}`;
   }
 
+
+  function aggregateProducts(rows) {
+    const map = new Map();
+    rows.forEach((r) => {
+      const translated = translateProductName(r.product);
+      const key = translated.groupKey;
+      if (!map.has(key)) map.set(key, { key, quantities: [], cost: 0, revenue: 0, profit: 0 });
+      const g = map.get(key);
+      g.cost += r.cost || 0;
+      g.revenue += r.revenue || 0;
+      g.profit += r.profit || 0;
+      if (r.quantity) g.quantities.push(r.quantity);
+    });
+    return Array.from(map.values()).map((g) => ({
+      ...g,
+      // Re-translate the bare group key itself so a merged group (e.g. small +
+      // large + unlabeled variants) never displays a stray size suffix.
+      translated: translateProductName(g.key),
+      quantityText: g.quantities.length ? g.quantities.join(" + ") : null,
+    }));
+  }
 
   const TRANSLATIONS = {
     en: {
@@ -219,6 +242,16 @@
       notWorkedTitle: "What didn't work",
       actionsTitle: "Actions for next month",
       noNotes: "No notes added for this month yet.",
+      bestSellersTitle: "Top 10 best sellers overall",
+      bestSellersHint: "Ranked by total revenue across every month recorded",
+      bsColProduct: "Product",
+      bsColQty: "Quantity",
+      bsColCost: "Bought (cost)",
+      bsColRevenue: "Sold for",
+      bsColProfit: "Profit",
+      fpColQty: "Quantity",
+      fpColCost: "Bought (cost)",
+      qtyNotRecorded: "not recorded",
     },
     fr: {
       month: "Mois",
@@ -309,6 +342,16 @@
       notWorkedTitle: "Ce qui n'a pas marché",
       actionsTitle: "Actions pour le mois prochain",
       noNotes: "Aucune note ajoutée pour ce mois pour l'instant.",
+      bestSellersTitle: "Top 10 des meilleures ventes (toutes périodes)",
+      bestSellersHint: "Classé par chiffre d'affaires total sur tous les mois enregistrés",
+      bsColProduct: "Produit",
+      bsColQty: "Quantité",
+      bsColCost: "Acheté (coût)",
+      bsColRevenue: "Vendu pour",
+      bsColProfit: "Bénéfice",
+      fpColQty: "Quantité",
+      fpColCost: "Acheté (coût)",
+      qtyNotRecorded: "non enregistrée",
     },
   };
 
@@ -415,6 +458,8 @@
         .map((r) => ({
           month: r.month.trim(),
           product: r.product.trim(),
+          quantity: (r.quantity || "").trim(),
+          cost: num(r.cost),
           revenue: num(r.revenue),
           profit: num(r.profit),
         }));
@@ -509,9 +554,18 @@
 
     document.getElementById("fullProductsTitle").textContent = t("fullProductsTitle");
     document.getElementById("fpColProduct").textContent = t("fpColProduct");
+    document.getElementById("fpColQty").textContent = t("fpColQty");
+    document.getElementById("fpColCost").textContent = t("fpColCost");
     document.getElementById("fpColRevenue").textContent = t("fpColRevenue");
     document.getElementById("fpColProfit").textContent = t("fpColProfit");
     document.getElementById("fpColMargin").textContent = t("fpColMargin");
+    document.getElementById("bestSellersTitle").textContent = t("bestSellersTitle");
+    document.getElementById("bestSellersHint").textContent = t("bestSellersHint");
+    document.getElementById("bsColProduct").textContent = t("bsColProduct");
+    document.getElementById("bsColQty").textContent = t("bsColQty");
+    document.getElementById("bsColCost").textContent = t("bsColCost");
+    document.getElementById("bsColRevenue").textContent = t("bsColRevenue");
+    document.getElementById("bsColProfit").textContent = t("bsColProfit");
     document.getElementById("notesTitle").textContent = t("notesTitle");
     document.getElementById("notesHint").textContent = t("notesHint");
     document.getElementById("workedTitle").textContent = t("workedTitle");
@@ -649,7 +703,8 @@
   function renderProducts() {
     const month = state.summary[state.selectedIndex].month;
     document.getElementById("productsTitle").textContent = t("topProductsTitle", month);
-    const rows = state.products.filter((p) => p.month === month).sort((a, b) => b.profit - a.profit).slice(0, 8);
+    const monthRows = state.products.filter((p) => p.month === month);
+    const rows = aggregateProducts(monthRows).sort((a, b) => b.profit - a.profit).slice(0, 8);
     const tbody = document.querySelector("#productsTable tbody");
     tbody.innerHTML = "";
     if (rows.length === 0) {
@@ -658,10 +713,9 @@
     }
     rows.forEach((p, i) => {
       const tr = document.createElement("tr");
-      const translated = translateProductName(p.product);
       tr.innerHTML = `
         <td class="rank">${i + 1}</td>
-        <td>${renderTranslated(translated)}</td>
+        <td>${renderTranslated(p.translated)}</td>
         <td class="num">${p.revenue ? fmtFBU(p.revenue) : "-"}</td>
         <td class="num">${fmtFBU(p.profit)}</td>
       `;
@@ -907,24 +961,47 @@
 
   function renderProductsTab() {
     const month = state.summary[state.selectedIndex].month;
-    const rows = state.products.filter((p) => p.month === month).sort((a, b) => b.profit - a.profit);
+    const monthRows = state.products.filter((p) => p.month === month);
+    const rows = aggregateProducts(monthRows).sort((a, b) => b.profit - a.profit);
     const tbody = document.querySelector("#fullProductsTable tbody");
     tbody.innerHTML = "";
     if (rows.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="empty-state">${t("noProducts")}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="empty-state">${t("noProducts")}</td></tr>`;
     } else {
       rows.forEach((p, i) => {
         const tr = document.createElement("tr");
-        const translated = translateProductName(p.product);
         const margin = p.revenue ? (p.profit / p.revenue) * 100 : null;
         tr.innerHTML = `
           <td class="rank">${i + 1}</td>
-          <td>${renderTranslated(translated)}</td>
+          <td>${renderTranslated(p.translated)}</td>
+          <td class="num">${p.quantityText || t("qtyNotRecorded")}</td>
+          <td class="num">${p.cost ? fmtFBU(p.cost) : "-"}</td>
           <td class="num">${p.revenue ? fmtFBU(p.revenue) : "-"}</td>
           <td class="num">${fmtFBU(p.profit)}</td>
           <td class="num">${margin !== null ? margin.toFixed(1) + "%" : "-"}</td>
         `;
         tbody.appendChild(tr);
+      });
+    }
+
+    // Top 10 best sellers across every month recorded so far, ranked by total revenue.
+    const allTime = aggregateProducts(state.products).sort((a, b) => b.revenue - a.revenue).slice(0, 10);
+    const bestTbody = document.querySelector("#bestSellersTable tbody");
+    bestTbody.innerHTML = "";
+    if (allTime.length === 0) {
+      bestTbody.innerHTML = `<tr><td colspan="6" class="empty-state">${t("noProducts")}</td></tr>`;
+    } else {
+      allTime.forEach((p, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="rank">${i + 1}</td>
+          <td>${renderTranslated(p.translated)}</td>
+          <td class="num">${p.quantityText || t("qtyNotRecorded")}</td>
+          <td class="num">${p.cost ? fmtFBU(p.cost) : "-"}</td>
+          <td class="num">${p.revenue ? fmtFBU(p.revenue) : "-"}</td>
+          <td class="num">${fmtFBU(p.profit)}</td>
+        `;
+        bestTbody.appendChild(tr);
       });
     }
 
