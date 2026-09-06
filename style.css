@@ -142,8 +142,11 @@ select#monthSelect {
   display: flex;
   gap: 4px;
   border-top: 1px solid #2E5C4D;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 .tab-btn {
+  flex: 0 0 auto;
   font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 500;
@@ -153,6 +156,7 @@ select#monthSelect {
   border-bottom: 3px solid transparent;
   padding: 12px 14px 10px;
   cursor: pointer;
+  white-space: nowrap;
 }
 .tab-btn:hover { color: #F4F2E9; }
 .tab-btn.active {
@@ -195,6 +199,36 @@ select#monthSelect {
 .notes-box ul { margin: 0; padding-left: 18px; }
 .notes-box li { font-size: 0.9rem; margin-bottom: 6px; }
 .notes-box .empty-state { padding: 4px 0; text-align: left; font-size: 0.88rem; }
+
+/* ---------- P&L statement ---------- */
+.pl-table { width: 100%; border-collapse: collapse; }
+.pl-table td { padding: 7px 4px; font-size: 0.94rem; border-bottom: none; }
+.pl-table tr.pl-section td {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--forest-deep);
+  padding-top: 20px;
+  font-size: 1rem;
+}
+.pl-table tr.pl-section:first-child td { padding-top: 0; }
+.pl-table tr.pl-line td:first-child { padding-left: 18px; color: var(--ink-soft); }
+.pl-table tr.pl-line td.num { font-family: var(--font-num); }
+.pl-table tr.pl-subtotal td {
+  font-weight: 600;
+  border-top: 1px solid var(--paper-line);
+  padding-top: 10px;
+}
+.pl-table tr.pl-subtotal td.num { font-family: var(--font-num); }
+.pl-table tr.pl-highlight td {
+  font-weight: 700;
+  color: var(--forest-deep);
+  font-size: 1.05rem;
+  border-top: 2px solid var(--forest);
+  padding-top: 12px;
+}
+.pl-table tr.pl-highlight td.num { font-family: var(--font-num); }
+.pl-table td.num { text-align: right; }
+.pl-table td.pl-note { color: var(--ink-soft); font-size: 0.8rem; font-style: italic; }
 
 /* ---------- Demo banner ---------- */
 .demo-banner {

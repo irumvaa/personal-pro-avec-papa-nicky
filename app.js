@@ -252,6 +252,39 @@
       fpColQty: "Quantity",
       fpColCost: "Bought (cost)",
       qtyNotRecorded: "not recorded",
+      tabPL: "Profit & Loss",
+      tabExpenses: "Expenses",
+      tabPurchases: "Purchases",
+      plTitle: "Profit & Loss statement",
+      plRevenueSection: "I. Revenue",
+      plShopSales: "Shop sales revenue",
+      plTotalRevenue: "TOTAL REVENUE",
+      plExpenseSection: "II. Operating expenses",
+      plCogs: "Cost of goods sold",
+      plTotalExpenses: "TOTAL EXPENSES",
+      plResultsSection: "III. Results",
+      plGrossProfit: "GROSS PROFIT",
+      plNetProfit: "NET PROFIT",
+      plRoiSection: "IV. Return on investment",
+      plInvestment: "Total investment",
+      plNetProfitThisMonth: "Net profit this month",
+      plCumulativeProfit: "Cumulative net profit to date",
+      plMonthsToRecover: "Months to fully recover investment",
+      plNotApplicable: "not yet, at this pace",
+      expensesRegisterTitle: "Expenses register",
+      expensesRegisterHint: "Every expense entry recorded, grouped by month",
+      erColMonth: "Month",
+      erColCategory: "Category",
+      erColAmount: "Amount",
+      erTotalForMonth: "Total",
+      erNoExpenses: "No expenses recorded for any month yet.",
+      purchasesTitle: "Purchases register",
+      purchasesHint: "Cost of goods per product batch, as recorded in your sales logs. Supplier and purchase date aren't tracked in your current reports.",
+      prColMonth: "Month",
+      prColProduct: "Product",
+      prColQty: "Quantity",
+      prColCost: "Amount spent",
+      prNoPurchases: "No purchases recorded for any month yet.",
     },
     fr: {
       month: "Mois",
@@ -352,6 +385,39 @@
       fpColQty: "Quantité",
       fpColCost: "Acheté (coût)",
       qtyNotRecorded: "non enregistrée",
+      tabPL: "Compte de résultats",
+      tabExpenses: "Dépenses",
+      tabPurchases: "Achats",
+      plTitle: "Compte de résultats",
+      plRevenueSection: "I. Produits",
+      plShopSales: "Chiffre d'affaires boutique",
+      plTotalRevenue: "TOTAL PRODUITS",
+      plExpenseSection: "II. Charges d'exploitation",
+      plCogs: "Coût des marchandises vendues",
+      plTotalExpenses: "TOTAL CHARGES",
+      plResultsSection: "III. Résultats",
+      plGrossProfit: "BÉNÉFICE BRUT",
+      plNetProfit: "BÉNÉFICE NET",
+      plRoiSection: "IV. Retour sur investissement",
+      plInvestment: "Investissement total",
+      plNetProfitThisMonth: "Bénéfice net ce mois",
+      plCumulativeProfit: "Bénéfice net cumulé à ce jour",
+      plMonthsToRecover: "Mois pour récupérer entièrement l'investissement",
+      plNotApplicable: "pas encore, à ce rythme",
+      expensesRegisterTitle: "Registre des dépenses",
+      expensesRegisterHint: "Chaque dépense enregistrée, groupée par mois",
+      erColMonth: "Mois",
+      erColCategory: "Catégorie",
+      erColAmount: "Montant",
+      erTotalForMonth: "Total",
+      erNoExpenses: "Aucune dépense enregistrée pour aucun mois pour l'instant.",
+      purchasesTitle: "Registre des achats",
+      purchasesHint: "Coût des marchandises par lot de produit, tel qu'enregistré dans vos registres de ventes. Le fournisseur et la date d'achat ne sont pas suivis dans vos rapports actuels.",
+      prColMonth: "Mois",
+      prColProduct: "Produit",
+      prColQty: "Quantité",
+      prColCost: "Montant dépensé",
+      prNoPurchases: "Aucun achat enregistré pour aucun mois pour l'instant.",
     },
   };
 
@@ -528,6 +594,22 @@
     document.getElementById("tabBtnTrends").textContent = t("tabTrends");
     document.getElementById("tabBtnInvestment").textContent = t("tabInvestment");
     document.getElementById("tabBtnProducts").textContent = t("tabProducts");
+    document.getElementById("tabBtnPL").textContent = t("tabPL");
+    document.getElementById("tabBtnExpenses").textContent = t("tabExpenses");
+    document.getElementById("tabBtnPurchases").textContent = t("tabPurchases");
+
+    document.getElementById("plTitle").textContent = t("plTitle");
+    document.getElementById("expensesRegisterTitle").textContent = t("expensesRegisterTitle");
+    document.getElementById("expensesRegisterHint").textContent = t("expensesRegisterHint");
+    document.getElementById("erColMonth").textContent = t("erColMonth");
+    document.getElementById("erColCategory").textContent = t("erColCategory");
+    document.getElementById("erColAmount").textContent = t("erColAmount");
+    document.getElementById("purchasesTitle").textContent = t("purchasesTitle");
+    document.getElementById("purchasesHint").textContent = t("purchasesHint");
+    document.getElementById("prColMonth").textContent = t("prColMonth");
+    document.getElementById("prColProduct").textContent = t("prColProduct");
+    document.getElementById("prColQty").textContent = t("prColQty");
+    document.getElementById("prColCost").textContent = t("prColCost");
 
     document.getElementById("trendsBigTitle").textContent = t("trendsBigTitle");
     document.getElementById("marginChartTitle").textContent = t("marginChartTitle");
@@ -1024,6 +1106,98 @@
     fillList("actionsList", noteRow && noteRow.actions);
   }
 
+  function plRow(cls, label, valueFbu) {
+    const valHtml = valueFbu !== null && valueFbu !== undefined
+      ? `<td class="num">${fmtFBU(valueFbu)}<div class="pl-note">${dualUsd(valueFbu)}</div></td>`
+      : `<td></td>`;
+    return `<tr class="${cls}"><td>${label}</td>${valHtml}</tr>`;
+  }
+
+  function renderPLTab() {
+    if (!state.summary.length) return;
+    const row = state.summary[state.selectedIndex];
+    const month = row.month;
+    const monthExpenses = state.expenses.filter((e) => e.month === month);
+    const invested = state.config.investment.totalInitialInvestmentFbu;
+    const recovered = Math.max(0, row.cumulativeNetProfit);
+    const remaining = Math.max(0, invested - recovered);
+    const monthsSoFar = state.summary.slice(0, state.selectedIndex + 1);
+    const avgNet = monthsSoFar.reduce((a, r) => a + r.netProfit, 0) / monthsSoFar.length;
+    const monthsToRecover = remaining <= 0 ? 0 : avgNet > 0 ? Math.ceil(remaining / avgNet) : null;
+
+    let html = "";
+    html += `<tr class="pl-section"><td colspan="2">${t("plRevenueSection")} — ${month}</td></tr>`;
+    html += plRow("pl-line", t("plShopSales"), row.revenue);
+    html += plRow("pl-subtotal", t("plTotalRevenue"), row.revenue);
+
+    html += `<tr class="pl-section"><td colspan="2">${t("plExpenseSection")}</td></tr>`;
+    html += plRow("pl-line", t("plCogs"), row.cogs);
+    monthExpenses.forEach((e) => {
+      html += plRow("pl-line", renderTranslated(translateProductName(e.category)), e.amount);
+    });
+    html += plRow("pl-subtotal", t("plTotalExpenses"), row.cogs + row.operating_expenses);
+
+    html += `<tr class="pl-section"><td colspan="2">${t("plResultsSection")}</td></tr>`;
+    html += plRow("pl-line", `${t("plGrossProfit")} (${row.grossMargin.toFixed(1)}%)`, row.grossProfit);
+    html += plRow("pl-highlight", `${t("plNetProfit")} (${row.netMargin.toFixed(1)}%)`, row.netProfit);
+
+    html += `<tr class="pl-section"><td colspan="2">${t("plRoiSection")}</td></tr>`;
+    html += plRow("pl-line", t("plInvestment"), invested);
+    html += plRow("pl-line", t("plNetProfitThisMonth"), row.netProfit);
+    html += plRow("pl-line", t("plCumulativeProfit"), recovered);
+    html += `<tr class="pl-subtotal"><td>${t("plMonthsToRecover")}</td><td class="num">${monthsToRecover === null ? t("plNotApplicable") : monthsToRecover}</td></tr>`;
+
+    document.querySelector("#plTable tbody").innerHTML = html;
+  }
+
+  function renderExpensesTab() {
+    const tbody = document.querySelector("#expensesRegisterTable tbody");
+    tbody.innerHTML = "";
+    if (!state.expenses.length) {
+      tbody.innerHTML = `<tr><td colspan="3" class="empty-state">${t("erNoExpenses")}</td></tr>`;
+      return;
+    }
+    state.summary.forEach((r) => {
+      const rows = state.expenses.filter((e) => e.month === r.month);
+      if (rows.length === 0) return;
+      rows.forEach((e) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.month}</td>
+          <td>${renderTranslated(translateProductName(e.category))}</td>
+          <td class="num">${fmtFBU(e.amount)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      const total = rows.reduce((a, e) => a + e.amount, 0);
+      const totalTr = document.createElement("tr");
+      totalTr.innerHTML = `<td></td><td><strong>${t("erTotalForMonth")}</strong></td><td class="num"><strong>${fmtFBU(total)}</strong></td>`;
+      tbody.appendChild(totalTr);
+    });
+  }
+
+  function renderPurchasesTab() {
+    const tbody = document.querySelector("#purchasesTable tbody");
+    tbody.innerHTML = "";
+    if (!state.products.length) {
+      tbody.innerHTML = `<tr><td colspan="4" class="empty-state">${t("prNoPurchases")}</td></tr>`;
+      return;
+    }
+    state.summary.forEach((r) => {
+      const rows = state.products.filter((p) => p.month === r.month).sort((a, b) => b.cost - a.cost);
+      rows.forEach((p) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.month}</td>
+          <td>${renderTranslated(translateProductName(p.product))}</td>
+          <td class="num">${p.quantity || t("qtyNotRecorded")}</td>
+          <td class="num">${fmtFBU(p.cost)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    });
+  }
+
   function renderAll() {
     renderStaticUI();
     renderKpis();
@@ -1035,6 +1209,9 @@
     renderTrendsTab();
     renderInvestmentTab();
     renderProductsTab();
+    renderPLTab();
+    renderExpensesTab();
+    renderPurchasesTab();
   }
 
   document.querySelectorAll(".tab-btn").forEach((btn) => {

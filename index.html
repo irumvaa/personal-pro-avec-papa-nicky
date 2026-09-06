@@ -37,6 +37,9 @@
     <button class="tab-btn" data-tab="trends" id="tabBtnTrends">Trends</button>
     <button class="tab-btn" data-tab="investment" id="tabBtnInvestment">Investment Recovery</button>
     <button class="tab-btn" data-tab="products" id="tabBtnProducts">Products</button>
+    <button class="tab-btn" data-tab="pl" id="tabBtnPL">Profit &amp; Loss</button>
+    <button class="tab-btn" data-tab="expenses" id="tabBtnExpenses">Expenses</button>
+    <button class="tab-btn" data-tab="purchases" id="tabBtnPurchases">Purchases</button>
   </div>
 </div>
 
@@ -246,6 +249,50 @@
           <ul id="actionsList"></ul>
         </div>
       </div>
+    </section>
+  </div>
+
+  <!-- ============ PROFIT & LOSS TAB ============ -->
+  <div class="tab-panel" id="panel-pl">
+    <section>
+      <div class="panel">
+        <h3 id="plTitle">Profit &amp; Loss statement</h3>
+        <table class="ledger pl-table" id="plTable">
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ EXPENSES TAB ============ -->
+  <div class="tab-panel" id="panel-expenses">
+    <section>
+      <div class="section-head">
+        <h2 id="expensesRegisterTitle">Expenses register</h2>
+        <span class="hint" id="expensesRegisterHint">Every expense entry recorded, grouped by month</span>
+      </div>
+      <table class="ledger" id="expensesRegisterTable">
+        <thead>
+          <tr><th id="erColMonth">Month</th><th id="erColCategory">Category</th><th class="num" id="erColAmount">Amount</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- ============ PURCHASES TAB ============ -->
+  <div class="tab-panel" id="panel-purchases">
+    <section>
+      <div class="section-head">
+        <h2 id="purchasesTitle">Purchases register</h2>
+        <span class="hint" id="purchasesHint">Cost of goods per product batch, as recorded in your sales logs. Supplier and purchase date aren't tracked in your current reports.</span>
+      </div>
+      <table class="ledger" id="purchasesTable">
+        <thead>
+          <tr><th id="prColMonth">Month</th><th id="prColProduct">Product</th><th class="num" id="prColQty">Quantity</th><th class="num" id="prColCost">Amount spent</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
   </div>
 
