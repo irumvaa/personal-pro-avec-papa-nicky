@@ -101,7 +101,6 @@
 
   function populateHeader() {
     document.getElementById("businessName").textContent = state.config.businessName;
-    document.getElementById("businessLocation").textContent = state.config.location;
     const rate = state.config.exchangeRates;
     document.getElementById("footerNote").textContent =
       `Figures in Burundian Francs (FBU). USD estimates use a bank rate of ${rate.bankRateFbuPerUsd.toLocaleString("en-US")} FBU/$ and a black market rate of ${rate.blackMarketRateFbuPerUsd.toLocaleString("en-US")} FBU/$.`;
