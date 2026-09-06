@@ -17,8 +17,12 @@
       <h1 id="businessName">Mini Alimentation</h1>
     </div>
     <div class="controls">
+      <div class="lang-toggle" id="langToggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+      </div>
       <div>
-        <label for="monthSelect">Month</label>
+        <label for="monthSelect" id="monthLabel">Month</label>
         <select id="monthSelect"></select>
       </div>
       <a class="edit-link" id="editLink" href="#" target="_blank" rel="noopener">Update this month's data</a>
@@ -39,19 +43,19 @@
   <section>
     <div class="grid-2">
       <div class="panel">
-        <h3>Revenue, expenses and profit over time</h3>
+        <h3 id="trendPanelTitle">Revenue, expenses and profit over time</h3>
         <canvas id="trendChart" height="220"></canvas>
       </div>
       <div class="panel">
-        <h3>Investment recovery</h3>
+        <h3 id="recoveryPanelTitle">Investment recovery</h3>
         <div class="recovery-pct" id="recoveryPct">0%</div>
         <div class="recovery-bar-track">
           <div class="recovery-bar-fill" id="recoveryBarFill" style="width:0%"></div>
         </div>
         <div class="recovery-figures">
-          <div>Invested: <strong id="recoveryInvested">-</strong></div>
-          <div>Recovered so far: <strong id="recoveryRecovered">-</strong></div>
-          <div class="muted">Remaining: <span id="recoveryRemaining">-</span></div>
+          <div><span id="recoveryInvestedLabel">Invested:</span> <strong id="recoveryInvested">-</strong></div>
+          <div><span id="recoveryRecoveredLabel">Recovered so far:</span> <strong id="recoveryRecovered">-</strong></div>
+          <div class="muted"><span id="recoveryRemainingLabel">Remaining:</span> <span id="recoveryRemaining">-</span></div>
           <div class="muted" id="recoveryEta">-</div>
         </div>
       </div>
@@ -64,7 +68,7 @@
         <h3 id="productsTitle">Top products</h3>
         <table class="ledger" id="productsTable">
           <thead>
-            <tr><th></th><th>Product</th><th class="num">Revenue</th><th class="num">Profit</th></tr>
+            <tr><th></th><th id="colProductHead">Product</th><th class="num" id="colRevenueHead">Revenue</th><th class="num" id="colProfitHead">Profit</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -79,21 +83,21 @@
 
   <section>
     <div class="section-head">
-      <h2>Full history</h2>
-      <span class="hint">Every month you've entered, side by side</span>
+      <h2 id="historyTitle">Full history</h2>
+      <span class="hint" id="historyHint">Every month you've entered, side by side</span>
     </div>
     <button class="history-toggle" id="historyToggle">Show all months</button>
     <div id="historyTableWrap">
       <table class="ledger" id="historyTable">
         <thead>
           <tr>
-            <th>Month</th>
-            <th class="num">Revenue</th>
-            <th class="num">Gross profit</th>
-            <th class="num">Gross margin</th>
-            <th class="num">Net profit</th>
-            <th class="num">Net margin</th>
-            <th class="num">Receivables</th>
+            <th id="hMonth">Month</th>
+            <th class="num" id="hRevenue">Revenue</th>
+            <th class="num" id="hGrossProfit">Gross profit</th>
+            <th class="num" id="hGrossMargin">Gross margin</th>
+            <th class="num" id="hNetProfit">Net profit</th>
+            <th class="num" id="hNetMargin">Net margin</th>
+            <th class="num" id="hReceivables">Receivables</th>
           </tr>
         </thead>
         <tbody></tbody>

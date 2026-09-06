@@ -91,6 +91,29 @@ select#monthSelect {
 }
 .edit-link:hover { background: #24564A; }
 
+.lang-toggle {
+  display: flex;
+  border: 1px solid #4A7767;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.lang-btn {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: transparent;
+  color: #C9D6C7;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.lang-btn + .lang-btn { border-left: 1px solid #4A7767; }
+.lang-btn.active {
+  background: var(--marigold-deep);
+  color: #2A1B05;
+}
+.lang-btn:hover:not(.active) { background: #24564A; color: #F4F2E9; }
+
 /* ---------- Demo banner ---------- */
 .demo-banner {
   background: #FBEBD3;
