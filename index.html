@@ -32,6 +32,12 @@
       <a class="edit-link" id="editLink" href="#" target="_blank" rel="noopener">Update this month's data</a>
     </div>
   </div>
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="overview" id="tabBtnOverview">Overview</button>
+    <button class="tab-btn" data-tab="trends" id="tabBtnTrends">Trends</button>
+    <button class="tab-btn" data-tab="investment" id="tabBtnInvestment">Investment Recovery</button>
+    <button class="tab-btn" data-tab="products" id="tabBtnProducts">Products</button>
+  </div>
 </div>
 
 <div class="demo-banner" id="demoBanner">
@@ -40,74 +46,196 @@
 
 <div class="wrap">
 
-  <section class="kpis">
-    <div class="kpi-row" id="kpiRow"></div>
-  </section>
+  <!-- ============ OVERVIEW TAB ============ -->
+  <div class="tab-panel active" id="panel-overview">
 
-  <section>
-    <div class="grid-2">
-      <div class="panel">
-        <h3 id="trendPanelTitle">Revenue, expenses and profit over time</h3>
-        <canvas id="trendChart" height="220"></canvas>
-      </div>
-      <div class="panel">
-        <h3 id="recoveryPanelTitle">Investment recovery</h3>
-        <div class="recovery-pct" id="recoveryPct">0%</div>
-        <div class="recovery-bar-track">
-          <div class="recovery-bar-fill" id="recoveryBarFill" style="width:0%"></div>
-        </div>
-        <div class="recovery-figures">
-          <div><span id="recoveryInvestedLabel">Invested:</span> <strong id="recoveryInvested">-</strong></div>
-          <div><span id="recoveryRecoveredLabel">Recovered so far:</span> <strong id="recoveryRecovered">-</strong></div>
-          <div class="muted"><span id="recoveryRemainingLabel">Remaining:</span> <span id="recoveryRemaining">-</span></div>
-          <div class="muted" id="recoveryEta">-</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <section class="kpis">
+      <div class="kpi-row" id="kpiRow"></div>
+    </section>
 
-  <section>
-    <div class="grid-2">
-      <div class="panel">
-        <h3 id="productsTitle">Top products</h3>
-        <table class="ledger" id="productsTable">
+    <section>
+      <div class="grid-2">
+        <div class="panel">
+          <h3 id="trendPanelTitle">Revenue, expenses and profit over time</h3>
+          <canvas id="trendChart" height="220"></canvas>
+        </div>
+        <div class="panel">
+          <h3 id="recoveryPanelTitle">Investment recovery</h3>
+          <div class="recovery-pct" id="recoveryPct">0%</div>
+          <div class="recovery-bar-track">
+            <div class="recovery-bar-fill" id="recoveryBarFill" style="width:0%"></div>
+          </div>
+          <div class="recovery-figures">
+            <div><span id="recoveryInvestedLabel">Invested:</span> <strong id="recoveryInvested">-</strong></div>
+            <div><span id="recoveryRecoveredLabel">Recovered so far:</span> <strong id="recoveryRecovered">-</strong></div>
+            <div class="muted"><span id="recoveryRemainingLabel">Remaining:</span> <span id="recoveryRemaining">-</span></div>
+            <div class="muted" id="recoveryEta">-</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-2">
+        <div class="panel">
+          <h3 id="productsTitle">Top products</h3>
+          <table class="ledger" id="productsTable">
+            <thead>
+              <tr><th></th><th id="colProductHead">Product</th><th class="num" id="colRevenueHead">Revenue</th><th class="num" id="colProfitHead">Profit</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h3 id="expenseTitle">Expense breakdown</h3>
+          <div class="expense-list" id="expenseList"></div>
+          <div class="reconcile-warning" id="reconcileWarning" style="display:none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2 id="historyTitle">Full history</h2>
+        <span class="hint" id="historyHint">Every month you've entered, side by side</span>
+      </div>
+      <button class="history-toggle" id="historyToggle">Show all months</button>
+      <div id="historyTableWrap">
+        <table class="ledger" id="historyTable">
           <thead>
-            <tr><th></th><th id="colProductHead">Product</th><th class="num" id="colRevenueHead">Revenue</th><th class="num" id="colProfitHead">Profit</th></tr>
+            <tr>
+              <th id="hMonth">Month</th>
+              <th class="num" id="hRevenue">Revenue</th>
+              <th class="num" id="hGrossProfit">Gross profit</th>
+              <th class="num" id="hGrossMargin">Gross margin</th>
+              <th class="num" id="hNetProfit">Net profit</th>
+              <th class="num" id="hNetMargin">Net margin</th>
+              <th class="num" id="hReceivables">Receivables</th>
+            </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-      <div class="panel">
-        <h3 id="expenseTitle">Expense breakdown</h3>
-        <div class="expense-list" id="expenseList"></div>
-        <div class="reconcile-warning" id="reconcileWarning" style="display:none;"></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <div class="section-head">
-      <h2 id="historyTitle">Full history</h2>
-      <span class="hint" id="historyHint">Every month you've entered, side by side</span>
-    </div>
-    <button class="history-toggle" id="historyToggle">Show all months</button>
-    <div id="historyTableWrap">
-      <table class="ledger" id="historyTable">
+  </div>
+
+  <!-- ============ TRENDS TAB ============ -->
+  <div class="tab-panel" id="panel-trends">
+    <section>
+      <div class="panel">
+        <h3 id="trendsBigTitle">Revenue, costs and profit — full breakdown</h3>
+        <canvas id="trendsBigChart" height="260"></canvas>
+      </div>
+    </section>
+    <section>
+      <div class="grid-2">
+        <div class="panel">
+          <h3 id="marginChartTitle">Margins over time</h3>
+          <canvas id="marginChart" height="220"></canvas>
+        </div>
+        <div class="panel">
+          <h3 id="expenseTrendTitle">Expense categories over time</h3>
+          <canvas id="expenseTrendChart" height="220"></canvas>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="section-head">
+        <h2 id="growthTableTitle">Month-over-month growth</h2>
+      </div>
+      <table class="ledger" id="growthTable">
         <thead>
           <tr>
-            <th id="hMonth">Month</th>
-            <th class="num" id="hRevenue">Revenue</th>
-            <th class="num" id="hGrossProfit">Gross profit</th>
-            <th class="num" id="hGrossMargin">Gross margin</th>
-            <th class="num" id="hNetProfit">Net profit</th>
-            <th class="num" id="hNetMargin">Net margin</th>
-            <th class="num" id="hReceivables">Receivables</th>
+            <th id="gMonth">Month</th>
+            <th class="num" id="gRevenue">Revenue</th>
+            <th class="num" id="gRevenueGrowth">Growth</th>
+            <th class="num" id="gGrossProfit">Gross profit</th>
+            <th class="num" id="gGrossProfitGrowth">Growth</th>
+            <th class="num" id="gNetProfit">Net profit</th>
+            <th class="num" id="gNetProfitGrowth">Growth</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
-    </div>
-  </section>
+    </section>
+  </div>
+
+  <!-- ============ INVESTMENT TAB ============ -->
+  <div class="tab-panel" id="panel-investment">
+    <section>
+      <div class="panel panel-hero">
+        <h3 id="investmentHeroTitle">Investment recovery</h3>
+        <div class="recovery-pct recovery-pct-big" id="recoveryPctBig">0%</div>
+        <div class="recovery-bar-track">
+          <div class="recovery-bar-fill" id="recoveryBarFillBig" style="width:0%"></div>
+        </div>
+        <div class="recovery-figures recovery-figures-big">
+          <div><span id="recoveryInvestedLabelBig">Invested:</span> <strong id="recoveryInvestedBig">-</strong></div>
+          <div><span id="recoveryRecoveredLabelBig">Recovered so far:</span> <strong id="recoveryRecoveredBig">-</strong></div>
+          <div class="muted"><span id="recoveryRemainingLabelBig">Remaining:</span> <span id="recoveryRemainingBig">-</span></div>
+          <div class="muted" id="recoveryEtaBig">-</div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="panel">
+        <h3 id="cumulativeChartTitle">Cumulative profit vs. investment</h3>
+        <canvas id="cumulativeChart" height="240"></canvas>
+      </div>
+    </section>
+    <section>
+      <div class="section-head">
+        <h2 id="recoveryTableTitle">Recovery by month</h2>
+      </div>
+      <table class="ledger" id="recoveryTable">
+        <thead>
+          <tr>
+            <th id="rMonth">Month</th>
+            <th class="num" id="rNetProfit">Net profit</th>
+            <th class="num" id="rCumulative">Cumulative</th>
+            <th class="num" id="rPctRecovered">% of investment recovered</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- ============ PRODUCTS TAB ============ -->
+  <div class="tab-panel" id="panel-products">
+    <section>
+      <div class="panel">
+        <h3 id="fullProductsTitle">All products</h3>
+        <table class="ledger" id="fullProductsTable">
+          <thead>
+            <tr><th></th><th id="fpColProduct">Product</th><th class="num" id="fpColRevenue">Revenue</th><th class="num" id="fpColProfit">Profit</th><th class="num" id="fpColMargin">Margin</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+    <section>
+      <div class="section-head">
+        <h2 id="notesTitle">Notes for this month</h2>
+        <span class="hint" id="notesHint">Filled in at the end of each month, in data/notes.csv</span>
+      </div>
+      <div class="notes-grid">
+        <div class="notes-box notes-worked">
+          <h4 id="workedTitle">What worked</h4>
+          <ul id="workedList"></ul>
+        </div>
+        <div class="notes-box notes-not-worked">
+          <h4 id="notWorkedTitle">What didn't work</h4>
+          <ul id="notWorkedList"></ul>
+        </div>
+        <div class="notes-box notes-actions">
+          <h4 id="actionsTitle">Actions for next month</h4>
+          <ul id="actionsList"></ul>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <footer>
     <p id="footerNote">Figures in Burundian Francs (FBU), with USD estimates at bank and black market rates.</p>

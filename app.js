@@ -178,6 +178,47 @@
       bank: "bank",
       blackMarket: "black market",
       showOriginalLabel: "Show original names",
+      tabOverview: "Overview",
+      tabTrends: "Trends",
+      tabInvestment: "Investment Recovery",
+      tabProducts: "Products",
+      trendsBigTitle: "Revenue, costs and profit — full breakdown",
+      legendCogs: "Cost of goods sold",
+      legendOpex: "Operating expenses",
+      legendGrossProfit: "Gross profit",
+      marginChartTitle: "Margins over time",
+      legendGrossMargin: "Gross margin %",
+      legendNetMargin: "Net margin %",
+      expenseTrendTitle: "Expense categories over time",
+      growthTableTitle: "Month-over-month growth",
+      gMonth: "Month",
+      gRevenue: "Revenue",
+      gRevenueGrowth: "Growth",
+      gGrossProfit: "Gross profit",
+      gGrossProfitGrowth: "Growth",
+      gNetProfit: "Net profit",
+      gNetProfitGrowth: "Growth",
+      firstMonthDash: "—",
+      investmentHeroTitle: "Investment recovery",
+      cumulativeChartTitle: "Cumulative profit vs. investment",
+      legendCumulative: "Cumulative net profit",
+      legendInvestmentLine: "Total investment",
+      recoveryTableTitle: "Recovery by month",
+      rMonth: "Month",
+      rNetProfit: "Net profit",
+      rCumulative: "Cumulative",
+      rPctRecovered: "% of investment recovered",
+      fullProductsTitle: "All products",
+      fpColProduct: "Product",
+      fpColRevenue: "Revenue",
+      fpColProfit: "Profit",
+      fpColMargin: "Margin",
+      notesTitle: "Notes for this month",
+      notesHint: "Filled in at the end of each month, in data/notes.csv",
+      workedTitle: "What worked",
+      notWorkedTitle: "What didn't work",
+      actionsTitle: "Actions for next month",
+      noNotes: "No notes added for this month yet.",
     },
     fr: {
       month: "Mois",
@@ -227,6 +268,47 @@
       bank: "banque",
       blackMarket: "marché parallèle",
       showOriginalLabel: "Afficher les noms d'origine",
+      tabOverview: "Vue d'ensemble",
+      tabTrends: "Tendances",
+      tabInvestment: "Récupération de l'investissement",
+      tabProducts: "Produits",
+      trendsBigTitle: "Chiffre d'affaires, coûts et bénéfice — détail complet",
+      legendCogs: "Coût des marchandises vendues",
+      legendOpex: "Dépenses d'exploitation",
+      legendGrossProfit: "Bénéfice brut",
+      marginChartTitle: "Marges dans le temps",
+      legendGrossMargin: "Marge brute %",
+      legendNetMargin: "Marge nette %",
+      expenseTrendTitle: "Catégories de dépenses dans le temps",
+      growthTableTitle: "Croissance mois par mois",
+      gMonth: "Mois",
+      gRevenue: "Chiffre d'affaires",
+      gRevenueGrowth: "Croissance",
+      gGrossProfit: "Bénéfice brut",
+      gGrossProfitGrowth: "Croissance",
+      gNetProfit: "Bénéfice net",
+      gNetProfitGrowth: "Croissance",
+      firstMonthDash: "—",
+      investmentHeroTitle: "Récupération de l'investissement",
+      cumulativeChartTitle: "Bénéfice cumulé vs. investissement",
+      legendCumulative: "Bénéfice net cumulé",
+      legendInvestmentLine: "Investissement total",
+      recoveryTableTitle: "Récupération par mois",
+      rMonth: "Mois",
+      rNetProfit: "Bénéfice net",
+      rCumulative: "Cumulé",
+      rPctRecovered: "% de l'investissement récupéré",
+      fullProductsTitle: "Tous les produits",
+      fpColProduct: "Produit",
+      fpColRevenue: "Chiffre d'affaires",
+      fpColProfit: "Bénéfice",
+      fpColMargin: "Marge",
+      notesTitle: "Notes pour ce mois",
+      notesHint: "À remplir à la fin de chaque mois, dans data/notes.csv",
+      workedTitle: "Ce qui a bien marché",
+      notWorkedTitle: "Ce qui n'a pas marché",
+      actionsTitle: "Actions pour le mois prochain",
+      noNotes: "Aucune note ajoutée pour ce mois pour l'instant.",
     },
   };
 
@@ -235,8 +317,14 @@
     summary: [],
     expenses: [],
     products: [],
+    notes: [],
     selectedIndex: -1,
     chart: null,
+    trendsBigChart: null,
+    marginChart: null,
+    expenseTrendChart: null,
+    cumulativeChart: null,
+    activeTab: "overview",
     lang: localStorage.getItem("dashboardLang") || "en",
     showOriginal: localStorage.getItem("dashboardShowOriginal") === "true",
   };
@@ -285,7 +373,8 @@
       fetchText("data/expenses.csv").then(parseCsv),
       fetchText("data/products.csv").then(parseCsv),
       fetchText("data/dictionary.json").then((t) => JSON.parse(t)).catch(() => ({})),
-    ]).then(([config, summaryRaw, expensesRaw, productsRaw, dictionary]) => {
+      fetchText("data/notes.csv").then(parseCsv).catch(() => []),
+    ]).then(([config, summaryRaw, expensesRaw, productsRaw, dictionary, notesRaw]) => {
       state.config = config;
       glossary.dict = dictionary;
 
@@ -328,6 +417,16 @@
           product: r.product.trim(),
           revenue: num(r.revenue),
           profit: num(r.profit),
+        }));
+
+      const splitBullets = (s) => (s || "").split("|").map((x) => x.trim()).filter(Boolean);
+      state.notes = (notesRaw || [])
+        .filter((r) => r.month && r.month.trim())
+        .map((r) => ({
+          month: r.month.trim(),
+          worked: splitBullets(r.worked),
+          notWorked: splitBullets(r.not_worked),
+          actions: splitBullets(r.actions),
         }));
     });
   }
@@ -379,6 +478,45 @@
 
     const origLabel = document.getElementById("showOriginalLabel");
     if (origLabel) origLabel.textContent = t("showOriginalLabel");
+
+    document.getElementById("tabBtnOverview").textContent = t("tabOverview");
+    document.getElementById("tabBtnTrends").textContent = t("tabTrends");
+    document.getElementById("tabBtnInvestment").textContent = t("tabInvestment");
+    document.getElementById("tabBtnProducts").textContent = t("tabProducts");
+
+    document.getElementById("trendsBigTitle").textContent = t("trendsBigTitle");
+    document.getElementById("marginChartTitle").textContent = t("marginChartTitle");
+    document.getElementById("expenseTrendTitle").textContent = t("expenseTrendTitle");
+    document.getElementById("growthTableTitle").textContent = t("growthTableTitle");
+    document.getElementById("gMonth").textContent = t("gMonth");
+    document.getElementById("gRevenue").textContent = t("gRevenue");
+    document.getElementById("gRevenueGrowth").textContent = t("gRevenueGrowth");
+    document.getElementById("gGrossProfit").textContent = t("gGrossProfit");
+    document.getElementById("gGrossProfitGrowth").textContent = t("gGrossProfitGrowth");
+    document.getElementById("gNetProfit").textContent = t("gNetProfit");
+    document.getElementById("gNetProfitGrowth").textContent = t("gNetProfitGrowth");
+
+    document.getElementById("investmentHeroTitle").textContent = t("investmentHeroTitle");
+    document.getElementById("recoveryInvestedLabelBig").textContent = t("invested") + ":";
+    document.getElementById("recoveryRecoveredLabelBig").textContent = t("recoveredSoFar") + ":";
+    document.getElementById("recoveryRemainingLabelBig").textContent = t("remaining") + ":";
+    document.getElementById("cumulativeChartTitle").textContent = t("cumulativeChartTitle");
+    document.getElementById("recoveryTableTitle").textContent = t("recoveryTableTitle");
+    document.getElementById("rMonth").textContent = t("rMonth");
+    document.getElementById("rNetProfit").textContent = t("rNetProfit");
+    document.getElementById("rCumulative").textContent = t("rCumulative");
+    document.getElementById("rPctRecovered").textContent = t("rPctRecovered");
+
+    document.getElementById("fullProductsTitle").textContent = t("fullProductsTitle");
+    document.getElementById("fpColProduct").textContent = t("fpColProduct");
+    document.getElementById("fpColRevenue").textContent = t("fpColRevenue");
+    document.getElementById("fpColProfit").textContent = t("fpColProfit");
+    document.getElementById("fpColMargin").textContent = t("fpColMargin");
+    document.getElementById("notesTitle").textContent = t("notesTitle");
+    document.getElementById("notesHint").textContent = t("notesHint");
+    document.getElementById("workedTitle").textContent = t("workedTitle");
+    document.getElementById("notWorkedTitle").textContent = t("notWorkedTitle");
+    document.getElementById("actionsTitle").textContent = t("actionsTitle");
   }
 
   function populateHeader() {
@@ -584,6 +722,231 @@
     });
   }
 
+  function switchTab(tabName) {
+    state.activeTab = tabName;
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.tab === tabName);
+    });
+    document.querySelectorAll(".tab-panel").forEach((panel) => {
+      panel.classList.toggle("active", panel.id === "panel-" + tabName);
+    });
+    // Charts need a layout pass once their container is visible, so redraw on switch.
+    renderTrendsTab();
+    renderInvestmentTab();
+  }
+
+  function renderTrendsTab() {
+    if (state.activeTab !== "trends" || !state.summary.length) return;
+    const labels = state.summary.map((r) => r.month);
+
+    const ctx = document.getElementById("trendsBigChart").getContext("2d");
+    if (state.trendsBigChart) state.trendsBigChart.destroy();
+    state.trendsBigChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          { label: t("legendRevenue"), data: state.summary.map((r) => r.revenue), borderColor: "#1F4B3D", backgroundColor: "#1F4B3D", tension: 0.25, pointRadius: 3 },
+          { label: t("legendCogs"), data: state.summary.map((r) => r.cogs), borderColor: "#8A8360", backgroundColor: "#8A8360", tension: 0.25, pointRadius: 3 },
+          { label: t("legendOpex"), data: state.summary.map((r) => r.operating_expenses), borderColor: "#A64B3B", backgroundColor: "#A64B3B", tension: 0.25, pointRadius: 3 },
+          { label: t("legendGrossProfit"), data: state.summary.map((r) => r.grossProfit), borderColor: "#2C5282", backgroundColor: "#2C5282", tension: 0.25, pointRadius: 3 },
+          { label: t("legendNetProfit"), data: state.summary.map((r) => r.netProfit), borderColor: "#B87E1F", backgroundColor: "#B87E1F", tension: 0.25, pointRadius: 3, borderWidth: 3 },
+        ],
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: "index", intersect: false },
+        plugins: {
+          legend: { position: "bottom", labels: { font: { family: "Inter" }, boxWidth: 12 } },
+          tooltip: { callbacks: { label: (item) => `${item.dataset.label}: ${fmtFBU(item.parsed.y)}` } },
+        },
+        scales: {
+          y: { ticks: { callback: (v) => (v / 1000000).toFixed(1) + "M", font: { family: "IBM Plex Mono", size: 11 } }, grid: { color: "#DDDACA" } },
+          x: { ticks: { font: { family: "Inter", size: 11 } }, grid: { display: false } },
+        },
+      },
+    });
+
+    const marginCtx = document.getElementById("marginChart").getContext("2d");
+    if (state.marginChart) state.marginChart.destroy();
+    state.marginChart = new Chart(marginCtx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          { label: t("legendGrossMargin"), data: state.summary.map((r) => r.grossMargin), borderColor: "#2C5282", backgroundColor: "#2C5282", tension: 0.25, pointRadius: 3 },
+          { label: t("legendNetMargin"), data: state.summary.map((r) => r.netMargin), borderColor: "#B87E1F", backgroundColor: "#B87E1F", tension: 0.25, pointRadius: 3 },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom", labels: { font: { family: "Inter" }, boxWidth: 12 } },
+          tooltip: { callbacks: { label: (item) => `${item.dataset.label}: ${item.parsed.y.toFixed(1)}%` } },
+        },
+        scales: {
+          y: { ticks: { callback: (v) => v + "%", font: { family: "IBM Plex Mono", size: 11 } }, grid: { color: "#DDDACA" } },
+          x: { ticks: { font: { family: "Inter", size: 11 } }, grid: { display: false } },
+        },
+      },
+    });
+
+    const categories = [...new Set(state.expenses.map((e) => e.category))];
+    const palette = ["#1F4B3D", "#A64B3B", "#B87E1F", "#2C5282", "#8A8360", "#6B4A17", "#4A7767"];
+    const expenseDatasets = categories.map((cat, i) => ({
+      label: renderTranslated(translateProductName(cat)).replace(/<[^>]+>/g, ""),
+      data: state.summary.map((r) => {
+        const row = state.expenses.find((e) => e.month === r.month && e.category === cat);
+        return row ? row.amount : 0;
+      }),
+      backgroundColor: palette[i % palette.length],
+    }));
+    const expenseCtx = document.getElementById("expenseTrendChart").getContext("2d");
+    if (state.expenseTrendChart) state.expenseTrendChart.destroy();
+    state.expenseTrendChart = new Chart(expenseCtx, {
+      type: "bar",
+      data: { labels, datasets: expenseDatasets },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom", labels: { font: { family: "Inter" }, boxWidth: 12 } },
+          tooltip: { callbacks: { label: (item) => `${item.dataset.label}: ${fmtFBU(item.parsed.y)}` } },
+        },
+        scales: {
+          x: { stacked: true, ticks: { font: { family: "Inter", size: 11 } }, grid: { display: false } },
+          y: { stacked: true, ticks: { callback: (v) => (v / 1000).toFixed(0) + "k", font: { family: "IBM Plex Mono", size: 11 } }, grid: { color: "#DDDACA" } },
+        },
+      },
+    });
+
+    const tbody = document.querySelector("#growthTable tbody");
+    tbody.innerHTML = "";
+    state.summary.forEach((r, i) => {
+      const prev = i > 0 ? state.summary[i - 1] : null;
+      const growth = (curr, prevVal) => (prev && prevVal ? pct(((curr - prevVal) / Math.abs(prevVal)) * 100) : t("firstMonthDash"));
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.month}</td>
+        <td class="num">${fmtFBU(r.revenue)}</td>
+        <td class="num">${growth(r.revenue, prev && prev.revenue)}</td>
+        <td class="num">${fmtFBU(r.grossProfit)}</td>
+        <td class="num">${growth(r.grossProfit, prev && prev.grossProfit)}</td>
+        <td class="num">${fmtFBU(r.netProfit)}</td>
+        <td class="num">${growth(r.netProfit, prev && prev.netProfit)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderInvestmentTab() {
+    if (state.activeTab !== "investment" || !state.summary.length) return;
+    const invested = state.config.investment.totalInitialInvestmentFbu;
+    const row = state.summary[state.selectedIndex];
+    const recovered = Math.max(0, row.cumulativeNetProfit);
+    const pctVal = invested > 0 ? Math.min(100, (recovered / invested) * 100) : 0;
+    const remaining = Math.max(0, invested - recovered);
+
+    document.getElementById("recoveryPctBig").textContent = pctVal.toFixed(1) + "%";
+    document.getElementById("recoveryBarFillBig").style.width = pctVal + "%";
+    document.getElementById("recoveryInvestedBig").textContent = fmtFBU(invested);
+    document.getElementById("recoveryRecoveredBig").textContent = fmtFBU(recovered);
+    document.getElementById("recoveryRemainingBig").textContent = fmtFBU(remaining);
+
+    const monthsSoFar = state.summary.slice(0, state.selectedIndex + 1);
+    const avgNet = monthsSoFar.reduce((a, r) => a + r.netProfit, 0) / monthsSoFar.length;
+    const etaElBig = document.getElementById("recoveryEtaBig");
+    if (remaining <= 0) {
+      etaElBig.textContent = t("etaRecovered");
+    } else if (avgNet > 0) {
+      etaElBig.textContent = t("etaProjection", fmtFBU(avgNet), Math.ceil(remaining / avgNet));
+    } else {
+      etaElBig.textContent = t("etaNoProgress");
+    }
+
+    const labels = state.summary.map((r) => r.month);
+    const cumData = state.summary.map((r) => r.cumulativeNetProfit);
+    const investmentLine = labels.map(() => invested);
+    const ctx = document.getElementById("cumulativeChart").getContext("2d");
+    if (state.cumulativeChart) state.cumulativeChart.destroy();
+    state.cumulativeChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          { label: t("legendCumulative"), data: cumData, borderColor: "#1F4B3D", backgroundColor: "rgba(31,75,61,0.15)", fill: true, tension: 0.25, pointRadius: 3 },
+          { label: t("legendInvestmentLine"), data: investmentLine, borderColor: "#A64B3B", borderDash: [6, 4], pointRadius: 0, fill: false },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom", labels: { font: { family: "Inter" }, boxWidth: 12 } },
+          tooltip: { callbacks: { label: (item) => `${item.dataset.label}: ${fmtFBU(item.parsed.y)}` } },
+        },
+        scales: {
+          y: { ticks: { callback: (v) => (v / 1000000).toFixed(1) + "M", font: { family: "IBM Plex Mono", size: 11 } }, grid: { color: "#DDDACA" } },
+          x: { ticks: { font: { family: "Inter", size: 11 } }, grid: { display: false } },
+        },
+      },
+    });
+
+    const tbody = document.querySelector("#recoveryTable tbody");
+    tbody.innerHTML = "";
+    state.summary.forEach((r) => {
+      const p = invested > 0 ? Math.min(100, (Math.max(0, r.cumulativeNetProfit) / invested) * 100) : 0;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.month}</td>
+        <td class="num">${fmtFBU(r.netProfit)}</td>
+        <td class="num">${fmtFBU(r.cumulativeNetProfit)}</td>
+        <td class="num">${p.toFixed(1)}%</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderProductsTab() {
+    const month = state.summary[state.selectedIndex].month;
+    const rows = state.products.filter((p) => p.month === month).sort((a, b) => b.profit - a.profit);
+    const tbody = document.querySelector("#fullProductsTable tbody");
+    tbody.innerHTML = "";
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" class="empty-state">${t("noProducts")}</td></tr>`;
+    } else {
+      rows.forEach((p, i) => {
+        const tr = document.createElement("tr");
+        const translated = translateProductName(p.product);
+        const margin = p.revenue ? (p.profit / p.revenue) * 100 : null;
+        tr.innerHTML = `
+          <td class="rank">${i + 1}</td>
+          <td>${renderTranslated(translated)}</td>
+          <td class="num">${p.revenue ? fmtFBU(p.revenue) : "-"}</td>
+          <td class="num">${fmtFBU(p.profit)}</td>
+          <td class="num">${margin !== null ? margin.toFixed(1) + "%" : "-"}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    const noteRow = state.notes.find((n) => n.month === month);
+    function fillList(id, items) {
+      const ul = document.getElementById(id);
+      ul.innerHTML = "";
+      if (!items || items.length === 0) {
+        ul.innerHTML = `<div class="empty-state">${t("noNotes")}</div>`;
+        return;
+      }
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+    }
+    fillList("workedList", noteRow && noteRow.worked);
+    fillList("notWorkedList", noteRow && noteRow.notWorked);
+    fillList("actionsList", noteRow && noteRow.actions);
+  }
+
   function renderAll() {
     renderStaticUI();
     renderKpis();
@@ -592,7 +955,14 @@
     renderProducts();
     renderExpenses();
     renderHistory();
+    renderTrendsTab();
+    renderInvestmentTab();
+    renderProductsTab();
   }
+
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+  });
 
   document.getElementById("monthSelect").addEventListener("change", (e) => {
     state.selectedIndex = parseInt(e.target.value, 10);

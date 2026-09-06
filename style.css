@@ -134,6 +134,68 @@ select#monthSelect {
   font-size: 0.85em;
 }
 
+/* ---------- Tabs ---------- */
+.tab-bar {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 4px;
+  border-top: 1px solid #2E5C4D;
+}
+.tab-btn {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  background: transparent;
+  color: #B9CBB6;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 12px 14px 10px;
+  cursor: pointer;
+}
+.tab-btn:hover { color: #F4F2E9; }
+.tab-btn.active {
+  color: #F4F2E9;
+  border-bottom-color: var(--marigold);
+  font-weight: 600;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ---------- Investment hero (bigger version) ---------- */
+.panel-hero { text-align: left; }
+.recovery-pct-big { font-size: 3.2rem; }
+.recovery-figures-big { font-size: 0.95rem; }
+
+/* ---------- Notes grid (Products tab) ---------- */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 860px) {
+  .notes-grid { grid-template-columns: 1fr; }
+}
+.notes-box {
+  background: var(--card-bg);
+  border: 1px solid var(--paper-line);
+  border-left: 3px solid var(--forest);
+  padding: 14px 16px;
+}
+.notes-box.notes-not-worked { border-left-color: var(--clay-red); }
+.notes-box.notes-actions { border-left-color: var(--marigold-deep); }
+.notes-box h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  margin: 0 0 8px;
+  color: var(--forest-deep);
+  font-weight: 600;
+}
+.notes-box ul { margin: 0; padding-left: 18px; }
+.notes-box li { font-size: 0.9rem; margin-bottom: 6px; }
+.notes-box .empty-state { padding: 4px 0; text-align: left; font-size: 0.88rem; }
+
 /* ---------- Demo banner ---------- */
 .demo-banner {
   background: #FBEBD3;
