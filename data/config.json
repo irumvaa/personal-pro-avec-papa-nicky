@@ -6,8 +6,23 @@
     "blackMarketRateFbuPerUsd": 4000
   },
   "investment": {
-    "totalInitialInvestmentFbu": 14700000,
-    "notes": "Equipment + working capital (corrected figure from the financial plan review). Update this if you invest more later."
+    "totalInitialInvestmentFbu": 27715021,
+    "equipmentFbu": 7221000,
+    "workingCapitalFbu": 20494021,
+    "notes": "From the DEPENSES sheet in your own reports (confirmed 16 Jul and 12 Aug 2026 versions, identical in both): Equipment/setup 7,221,000 FBU + Initial stock 20,494,021 FBU = 27,715,021 FBU. A 2,500,000 FBU item was noted as deliberately excluded pending addition 'this month' - the true total may be higher once that's added. This replaces the original financial plan's 12,000,000 / 14,700,000 FBU estimates, which were pre-launch projections, not actuals.",
+    "notesFr": "D'après la feuille DEPENSES de vos propres rapports (versions du 16 juillet et du 12 août 2026, identiques toutes les deux) : Équipement/installation 7 221 000 FBU + Stock initial 20 494 021 FBU = 27 715 021 FBU. Un article de 2 500 000 FBU a été volontairement exclu, à ajouter « ce mois-ci » selon la note - le total réel pourrait donc être plus élevé une fois ajouté. Ceci remplace les estimations du plan financier initial (12 000 000 / 14 700 000 FBU), qui étaient des projections avant lancement, pas des chiffres réels.",
+    "equipmentBreakdown": [
+      { "fr": "Loyer (3 mois de dépôt)", "en": "Rent (3-month deposit)", "amount": 1065000 },
+      { "fr": "Frigo Réfrigérateur", "en": "Refrigerator", "amount": 1650000 },
+      { "fr": "Frigo Congélateur", "en": "Freezer", "amount": 1550000 },
+      { "fr": "Équipements Cafétariat", "en": "Cafeteria equipment", "amount": 267000 },
+      { "fr": "Registre de Commerce", "en": "Business registration", "amount": 150000 },
+      { "fr": "Petit Stabilisateur Tension", "en": "Small voltage stabilizer", "amount": 15000 },
+      { "fr": "Étagères + Implantation", "en": "Shelving + store setup", "amount": 765000 },
+      { "fr": "Aquavie vide + Kandi + Kinju + Jibu + 5L Jibu (consignes)", "en": "Empty bottle deposits (Aquavie, Kandi, Kinju, Jibu, 5L Jibu)", "amount": 1054000 },
+      { "fr": "Caisses Fanta vides", "en": "Empty Fanta crates", "amount": 455000 },
+      { "fr": "Matelas + Drap", "en": "Mattress + bedding", "amount": 250000 }
+    ]
   },
   "githubEditBaseUrl": "https://github.com/irumvaa/personal-pro-avec-papa-nicky/edit/main/data/"
 }

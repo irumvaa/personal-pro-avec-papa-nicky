@@ -285,6 +285,10 @@
       prColQty: "Quantity",
       prColCost: "Amount spent",
       prNoPurchases: "No purchases recorded for any month yet.",
+      equipmentBreakdownTitle: "Initial investment breakdown",
+      equipmentBreakdownHint: "From your own expense records (DEPENSES sheet)",
+      ebColItem: "Item",
+      ebColAmount: "Amount",
     },
     fr: {
       month: "Mois",
@@ -418,6 +422,10 @@
       prColQty: "Quantité",
       prColCost: "Montant dépensé",
       prNoPurchases: "Aucun achat enregistré pour aucun mois pour l'instant.",
+      equipmentBreakdownTitle: "Détail de l'investissement initial",
+      equipmentBreakdownHint: "D'après vos propres registres de dépenses (feuille DEPENSES)",
+      ebColItem: "Article",
+      ebColAmount: "Montant",
     },
   };
 
@@ -630,6 +638,10 @@
     document.getElementById("cumulativeChartTitle").textContent = t("cumulativeChartTitle");
     document.getElementById("recoveryTableTitle").textContent = t("recoveryTableTitle");
     document.getElementById("rMonth").textContent = t("rMonth");
+    document.getElementById("equipmentBreakdownTitle").textContent = t("equipmentBreakdownTitle");
+    document.getElementById("equipmentBreakdownHint").textContent = t("equipmentBreakdownHint");
+    document.getElementById("ebColItem").textContent = t("ebColItem");
+    document.getElementById("ebColAmount").textContent = t("ebColAmount");
     document.getElementById("rNetProfit").textContent = t("rNetProfit");
     document.getElementById("rCumulative").textContent = t("rCumulative");
     document.getElementById("rPctRecovered").textContent = t("rPctRecovered");
@@ -1039,6 +1051,26 @@
       `;
       tbody.appendChild(tr);
     });
+
+    const breakdown = state.config.investment.equipmentBreakdown || [];
+    const ebTbody = document.querySelector("#equipmentBreakdownTable tbody");
+    ebTbody.innerHTML = "";
+    breakdown.forEach((item) => {
+      const tr = document.createElement("tr");
+      const label = state.lang === "fr" ? item.fr : item.en;
+      tr.innerHTML = `<td>${label}</td><td class="num">${fmtFBU(item.amount)}</td>`;
+      ebTbody.appendChild(tr);
+    });
+    if (breakdown.length) {
+      const totalTr = document.createElement("tr");
+      const equipTotal = breakdown.reduce((a, i) => a + i.amount, 0);
+      totalTr.innerHTML = `<td><strong>${state.lang === "fr" ? "Total équipement" : "Total equipment"}</strong></td><td class="num"><strong>${fmtFBU(equipTotal)}</strong></td>`;
+      ebTbody.appendChild(totalTr);
+    }
+    const notesEl = document.getElementById("investmentNotesText");
+    if (notesEl) {
+      notesEl.textContent = state.lang === "fr" ? (state.config.investment.notesFr || "") : (state.config.investment.notes || "");
+    }
   }
 
   function renderProductsTab() {
