@@ -214,7 +214,7 @@
       recoveryTableTitle: "Recovery by month",
       rMonth: "Month", rNetProfit: "Net profit", rCumulative: "Cumulative", rPctRecovered: "% of investment recovered",
       fullProductsTitle: "All products (all-time)",
-      fpColProduct: "Product", fpColQty: "Quantity", fpColCost: "Bought (cost)", fpColRevenue: "Sold for", fpColProfit: "Profit", fpColMargin: "Margin",
+      fpColMonth: "Month", fpColProduct: "Product", fpColQty: "Quantity", fpColCost: "Bought (cost)", fpColRevenue: "Sold for", fpColProfit: "Profit", fpColMargin: "Margin",
       qtyNotRecorded: "not recorded",
       notesTitle: "Notes for this month",
       notesHint: "Filled in at the end of each month, in data/notes.csv",
@@ -337,7 +337,7 @@
       recoveryTableTitle: "Récupération par mois",
       rMonth: "Mois", rNetProfit: "Bénéfice net", rCumulative: "Cumulé", rPctRecovered: "% de l'investissement récupéré",
       fullProductsTitle: "Tous les produits (toutes périodes)",
-      fpColProduct: "Produit", fpColQty: "Quantité", fpColCost: "Acheté (coût)", fpColRevenue: "Vendu pour", fpColProfit: "Bénéfice", fpColMargin: "Marge",
+      fpColMonth: "Mois", fpColProduct: "Produit", fpColQty: "Quantité", fpColCost: "Acheté (coût)", fpColRevenue: "Vendu pour", fpColProfit: "Bénéfice", fpColMargin: "Marge",
       qtyNotRecorded: "non enregistrée",
       notesTitle: "Notes pour ce mois",
       notesHint: "À remplir à la fin de chaque mois, dans data/notes.csv",
@@ -589,6 +589,7 @@
     document.getElementById("bsColRevenue").textContent = t("bsColRevenue");
     document.getElementById("bsColProfit").textContent = t("bsColProfit");
     document.getElementById("fullProductsTitle").textContent = t("fullProductsTitle");
+    document.getElementById("fpColMonth").textContent = t("fpColMonth");
     document.getElementById("fpColProduct").textContent = t("fpColProduct");
     document.getElementById("fpColQty").textContent = t("fpColQty");
     document.getElementById("fpColCost").textContent = t("fpColCost");
@@ -1016,18 +1017,21 @@
       });
     }
 
-    const allRows = aggregateProducts(state.products).sort((a, b) => b.profit - a.profit);
+    const allRows = state.products.slice().sort((a, b) => b.profit - a.profit);
     const tbody = document.querySelector("#fullProductsTable tbody");
     tbody.innerHTML = "";
     if (allRows.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="empty-state">${t("noProducts")}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="empty-state">${t("noProducts")}</td></tr>`;
     } else {
       allRows.forEach((p, i) => {
         const tr = document.createElement("tr");
+        const translated = translateProductName(p.product);
         const margin = p.revenue ? (p.profit / p.revenue) * 100 : null;
         tr.innerHTML = `
-          <td class="rank">${i + 1}</td><td>${renderTranslated(p.translated)}</td>
-          <td class="num">${p.quantityText || t("qtyNotRecorded")}</td>
+          <td class="rank">${i + 1}</td>
+          <td>${p.month}</td>
+          <td>${renderTranslated(translated)}</td>
+          <td class="num">${p.quantity || t("qtyNotRecorded")}</td>
           <td class="num">${p.cost ? fmtFBU(p.cost) : "-"}</td>
           <td class="num">${p.revenue ? fmtFBU(p.revenue) : "-"}</td>
           <td class="num">${fmtFBU(p.profit)}</td>
