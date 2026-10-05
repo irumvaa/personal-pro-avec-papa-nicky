@@ -1,5 +1,7 @@
 # Mini-Alimentation Dashboard
 
+**Live dashboard: https://irumvaa.github.io/personal-pro-avec-papa-nicky/**
+
 A simple dashboard to track how the mini-grocery store is doing each month:
 revenue, profit, expenses, top products, and progress toward recovering the
 initial investment. It reads three CSV files and one config file — no
