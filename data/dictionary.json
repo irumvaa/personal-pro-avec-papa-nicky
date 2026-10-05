@@ -31,6 +31,10 @@
     "Aquavie Lemon (bottled water brand)",
     "brand"
   ],
+  "AQUAVIE EAU": [
+    "Aquavie - plain water",
+    "brand"
+  ],
   "ARACHIDES": [
     "Peanuts",
     "high"
@@ -99,6 +103,10 @@
     "Nitro Chocolate (brand)",
     "brand"
   ],
+  "CAHIERS": [
+    "Notebooks",
+    "high"
+  ],
   "COCA": [
     "Coca-Cola",
     "brand"
@@ -106,6 +114,14 @@
   "COCA COLA": [
     "Coca-Cola",
     "brand"
+  ],
+  "COCA PLASTIQUE": [
+    "Coca-Cola (plastic bottle)",
+    "high"
+  ],
+  "COCA PLASTIQUE G": [
+    "Coca-Cola (plastic bottle, large)",
+    "high"
   ],
   "COMMUNICATION": [
     "Communication",
@@ -175,6 +191,10 @@
     "Fees",
     "high"
   ],
+  "FRAISE": [
+    "Strawberry",
+    "high"
+  ],
   "FURSANA": [
     "Fursana (tamarind juice brand)",
     "brand"
@@ -187,6 +207,10 @@
     "Go-Fresh (juice brand, carton)",
     "brand"
   ],
+  "GO-FLESH": [
+    "Go-Fresh (juice brand, spelling variant)",
+    "brand"
+  ],
   "HARICOTS": [
     "Beans",
     "high"
@@ -194,6 +218,10 @@
   "HUILE": [
     "Cooking oil",
     "high"
+  ],
+  "IBITUMBURA": [
+    "Ibitumbura (snack item, exact translation uncertain)",
+    "low"
   ],
   "IFYUFYU": [
     "Unknown item (\"ifyufyu\")",
@@ -235,6 +263,10 @@
     "Jibu (bottled water brand, small)",
     "brand"
   ],
+  "JUBU P": [
+    "Jibu (bottled water brand — spelling variant)",
+    "brand"
+  ],
   "JOJO": [
     "Jojo (soap/lotion brand)",
     "brand"
@@ -273,6 +305,10 @@
   ],
   "KINJU": [
     "Kinju (bottled water brand)",
+    "brand"
+  ],
+  "KINJU CARTO GRANG": [
+    "Kinju (bottled water brand, carton, large)",
     "brand"
   ],
   "KIRIDA": [
@@ -343,6 +379,10 @@
     "Malti (malt drink brand, small)",
     "brand"
   ],
+  "MARACUJA": [
+    "Passion fruit",
+    "high"
+  ],
   "MAMY LOVE": [
     "Mamy Love (baby formula brand)",
     "brand"
@@ -386,6 +426,10 @@
   "OSCAR": [
     "Oscar (biscuit brand)",
     "brand"
+  ],
+  "OVER TANGAWIZI": [
+    "Over Tangawizi (ginger drink brand)",
+    "medium"
   ],
   "P MOUCHOIR": [
     "Tissue packet",
@@ -451,6 +495,14 @@
     "Soap",
     "high"
   ],
+  "SAVON (1000)": [
+    "Soap (1000 FBU size)",
+    "high"
+  ],
+  "SAVON (500)": [
+    "Soap (500 FBU size)",
+    "high"
+  ],
   "SAVON SHAZA": [
     "Shaza Soap (brand)",
     "brand"
@@ -514,6 +566,10 @@
   "UDI": [
     "Udi (soda brand)",
     "brand"
+  ],
+  "VANILLA": [
+    "Vanilla (flavored drink)",
+    "medium"
   ],
   "VICO": [
     "Vico (bouillon cube brand)",
