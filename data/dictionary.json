@@ -87,6 +87,10 @@
     "Toothbrush (Smart brand)",
     "brand"
   ],
+  "CAHIERS": [
+    "Notebooks",
+    "high"
+  ],
   "CAISSE COMPTOIRE": [
     "Cash register",
     "high"
@@ -102,10 +106,6 @@
   "CHOCOLATE NITRO": [
     "Nitro Chocolate (brand)",
     "brand"
-  ],
-  "CAHIERS": [
-    "Notebooks",
-    "high"
   ],
   "COCA": [
     "Coca-Cola",
@@ -220,8 +220,8 @@
     "high"
   ],
   "IBITUMBURA": [
-    "Ibitumbura (snack item, exact translation uncertain)",
-    "low"
+    "Doughnuts",
+    "high"
   ],
   "IFYUFYU": [
     "Unknown item (\"ifyufyu\")",
@@ -263,16 +263,16 @@
     "Jibu (bottled water brand, small)",
     "brand"
   ],
-  "JUBU P": [
-    "Jibu (bottled water brand — spelling variant)",
-    "brand"
-  ],
   "JOJO": [
     "Jojo (soap/lotion brand)",
     "brand"
   ],
   "JOJO BIG BOSS": [
     "Jojo Big Boss (brand variant)",
+    "brand"
+  ],
+  "JUBU P": [
+    "Jibu (bottled water brand, spelling variant)",
     "brand"
   ],
   "JUS": [
@@ -379,13 +379,13 @@
     "Malti (malt drink brand, small)",
     "brand"
   ],
-  "MARACUJA": [
-    "Passion fruit",
-    "high"
-  ],
   "MAMY LOVE": [
     "Mamy Love (baby formula brand)",
     "brand"
+  ],
+  "MARACUJA": [
+    "Passion fruit",
+    "high"
   ],
   "MATNAT": [
     "Matnat (brand)",

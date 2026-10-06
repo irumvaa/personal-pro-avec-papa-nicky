@@ -263,6 +263,37 @@
       mProductsTitle: "Top products",
       mExpenseTitle: "Expense breakdown",
       mPlTitle: "Profit & Loss statement",
+      cashTitle: "Cash and working capital",
+      cashHint: "As reported by the shop at the end of each cycle",
+      cashIdleLabel: "Cash on hand, not yet put back into stock",
+      cashDebtsLabel: "Debts to recover",
+      cashDebtsPct: (p) => `${p}% of this cycle's sales`,
+      cashTurnoverLabel: "Capital turned over this cycle (cost of goods sold)",
+      cashStartLabel: "Starting working capital (initial stock)",
+      cashTurnoverPct: (p) => `This cycle turned over ${p}% of the starting working capital.`,
+      cashColCycle: "Cycle", cashColCash: "Cash on hand", cashColDebts: "Debts to recover",
+      cashNoData: "No cash figures recorded yet.",
+      cashNotePrefix: "Note",
+      healthTitle: "Health checks",
+      concLabel: "Sales concentration (top 2 products)",
+      concDetail: (m, parts, all) => `In ${m}: ${parts}. All-time: ${all}%.`,
+      concWarn: "Warning: more than half of sales depend on 2 products. If either one slows down, revenue drops sharply.",
+      concOk: "Sales are spread reasonably well across products.",
+      oneOffTag: "one-off",
+      beLabel: "Break-even sales per cycle",
+      beDetail: (opex, gm) => `Operating costs ${opex} divided by a gross margin of ${gm}%.`,
+      beSafety: (x, s) => `Latest cycle sales were ${x} times break-even, so ${s}% of sales were above it.`,
+      beBelow: "Latest cycle sales were below break-even.",
+      beCaveat: "Assumes the gross margin stays the same. This only covers running costs, not paying back the investment.",
+      paybackRange: (lo, hi) => (hi === null ? `${lo} months or more` : `${lo} to ${hi} months`),
+      paybackBest: (v, m) => `Best case, the latest cycle's net profit continues (${v}/month): about ${m} months.`,
+      paybackAvg: (v, m) => `At the all-time average (${v}/month): about ${m} months.`,
+      paybackCautious: (v, m) => `Cautious, latest cycle without one-off sales (${v}/month): about ${m} months.`,
+      paybackNever: "no payback at this pace",
+      paybackOneOffs: "One-off sales left out of the cautious case",
+      marginTitle: "Margin ranking",
+      marginHint: (min) => `Products with at least ${min} in sales. Marked products are top-10 sellers earning less than the shop's average margin.`,
+      marginBadge: "high volume, low margin",
     },
     fr: {
       allTimeLabel: "Totaux cumulés, sur tous les mois enregistrés",
@@ -386,6 +417,37 @@
       mProductsTitle: "Meilleurs produits",
       mExpenseTitle: "Répartition des dépenses",
       mPlTitle: "Compte de résultats",
+      cashTitle: "Trésorerie et fonds de roulement",
+      cashHint: "Tel que déclaré par la boutique à la fin de chaque cycle",
+      cashIdleLabel: "Argent en caisse, pas encore remis en stock",
+      cashDebtsLabel: "Dettes à recouvrir",
+      cashDebtsPct: (p) => `${p}% des ventes du cycle`,
+      cashTurnoverLabel: "Capital en mouvement ce cycle (coût des marchandises vendues)",
+      cashStartLabel: "Fonds de roulement de départ (stock initial)",
+      cashTurnoverPct: (p) => `Ce cycle a fait tourner ${p}% du fonds de roulement de départ.`,
+      cashColCycle: "Cycle", cashColCash: "Argent en caisse", cashColDebts: "Dettes à recouvrir",
+      cashNoData: "Aucun chiffre de trésorerie enregistré pour l'instant.",
+      cashNotePrefix: "Note",
+      healthTitle: "Indicateurs de santé",
+      concLabel: "Concentration des ventes (2 premiers produits)",
+      concDetail: (m, parts, all) => `En ${m} : ${parts}. Toutes périodes : ${all}%.`,
+      concWarn: "Attention : plus de la moitié des ventes dépend de 2 produits. Si l'un des deux ralentit, le chiffre d'affaires chute fortement.",
+      concOk: "Les ventes sont raisonnablement réparties entre les produits.",
+      oneOffTag: "ponctuel",
+      beLabel: "Ventes d'équilibre par cycle",
+      beDetail: (opex, gm) => `Charges d'exploitation ${opex} divisées par une marge brute de ${gm}%.`,
+      beSafety: (x, s) => `Les ventes du dernier cycle étaient ${x} fois le seuil d'équilibre, donc ${s}% des ventes étaient au-dessus.`,
+      beBelow: "Les ventes du dernier cycle étaient sous le seuil d'équilibre.",
+      beCaveat: "Suppose que la marge brute reste la même. Cela couvre seulement les charges courantes, pas le remboursement de l'investissement.",
+      paybackRange: (lo, hi) => (hi === null ? `${lo} mois ou plus` : `${lo} à ${hi} mois`),
+      paybackBest: (v, m) => `Meilleur cas, le bénéfice net du dernier cycle continue (${v}/mois) : environ ${m} mois.`,
+      paybackAvg: (v, m) => `À la moyenne de toutes les périodes (${v}/mois) : environ ${m} mois.`,
+      paybackCautious: (v, m) => `Prudent, dernier cycle sans ventes ponctuelles (${v}/mois) : environ ${m} mois.`,
+      paybackNever: "pas de remboursement à ce rythme",
+      paybackOneOffs: "Ventes ponctuelles exclues du cas prudent",
+      marginTitle: "Classement par marge",
+      marginHint: (min) => `Produits avec au moins ${min} de ventes. Les produits marqués font partie des 10 meilleures ventes mais ont une marge inférieure à la moyenne de la boutique.`,
+      marginBadge: "gros volume, faible marge",
     },
   };
 
@@ -396,6 +458,7 @@
     products: [],
     notes: [],
     initialStock: [],
+    cash: [],
     monthlyIndex: -1, // used only by the Monthly Detail tab
     chart: null,
     trendsBigChart: null,
@@ -444,7 +507,8 @@
       fetchText("data/dictionary.json").then((t) => JSON.parse(t)).catch(() => ({})),
       fetchText("data/notes.csv").then(parseCsv).catch(() => []),
       fetchText("data/initial_stock.csv").then(parseCsv).catch(() => []),
-    ]).then(([config, summaryRaw, expensesRaw, productsRaw, dictionary, notesRaw, initialStockRaw]) => {
+      fetchText("data/cash.csv").then(parseCsv).catch(() => []),
+    ]).then(([config, summaryRaw, expensesRaw, productsRaw, dictionary, notesRaw, initialStockRaw, cashRaw]) => {
       state.config = config;
       glossary.dict = dictionary;
 
@@ -484,6 +548,10 @@
         .filter((r) => r.month && r.month.trim())
         .map((r) => ({ month: r.month.trim(), worked: splitBullets(r.worked), notWorked: splitBullets(r.not_worked), actions: splitBullets(r.actions) }));
 
+      state.cash = (cashRaw || [])
+        .filter((r) => r.month && r.month.trim())
+        .map((r) => ({ month: r.month.trim(), cash: num(r.cash_on_hand), note: (r.note || "").trim(), noteFr: (r.note_fr || "").trim() }));
+
       state.initialStock = (initialStockRaw || [])
         .filter((r) => r.product && r.product.trim())
         .map((r) => ({ product: r.product.trim(), quantity: (r.quantity || "").trim(), cost: num(r.cost), listedPrice: num(r.listed_price) }));
@@ -508,6 +576,134 @@
       latestReceivables: state.summary.length ? state.summary[state.summary.length - 1].receivables : 0,
       latestMonth: state.summary.length ? state.summary[state.summary.length - 1].month : "",
     };
+  }
+
+  // ---------- Health checks: payback range, concentration, break-even, cash ----------
+  function oneOffsFor(month) { return (state.config.oneOffs || []).filter((o) => o.month === month); }
+  function isOneOff(month, product) {
+    const key = translateProductName(product).groupKey;
+    return oneOffsFor(month).some((o) => translateProductName(o.product).groupKey === key);
+  }
+  function oneOffProfit(month) {
+    return state.products.filter((p) => p.month === month && isOneOff(month, p.product)).reduce((a, p) => a + p.profit, 0);
+  }
+
+  function computePayback() {
+    const latest = state.summary[state.summary.length - 1];
+    if (!latest) return null;
+    const invested = state.config.investment.totalInitialInvestmentFbu;
+    const remaining = Math.max(0, invested - Math.max(0, latest.cumulativeNetProfit));
+    const avg = state.summary.reduce((a, r) => a + r.netProfit, 0) / state.summary.length;
+    const underlying = latest.netProfit - oneOffProfit(latest.month);
+    const best = Math.max(latest.netProfit, avg);
+    const cautious = Math.min(avg, underlying);
+    const months = (v) => (v > 0 ? Math.ceil(remaining / v) : null);
+    return { remaining, best, avg, cautious, bestMonths: months(best), avgMonths: months(avg), cautiousMonths: months(cautious), oneOffs: oneOffsFor(latest.month) };
+  }
+
+  function paybackHtml(pb) {
+    const m = (n) => (n === null ? t("paybackNever") : n);
+    let html = `<div class="payback-head">${t("paybackRange", pb.bestMonths === null ? t("paybackNever") : pb.bestMonths, pb.cautiousMonths)}</div><ul class="payback-list">`;
+    html += `<li>${t("paybackBest", fmtFBU(pb.best), m(pb.bestMonths))}</li>`;
+    html += `<li>${t("paybackAvg", fmtFBU(pb.avg), m(pb.avgMonths))}</li>`;
+    html += `<li>${t("paybackCautious", fmtFBU(pb.cautious), m(pb.cautiousMonths))}</li></ul>`;
+    if (pb.oneOffs.length) {
+      const names = pb.oneOffs.map((o) => `${state.lang === "fr" ? o.product.charAt(0) + o.product.slice(1).toLowerCase() : translateProductName(o.product).text}: ${state.lang === "fr" ? (o.noteFr || o.note) : o.note}`).join(" ");
+      html += `<div class="payback-note">${t("paybackOneOffs")}. ${names}</div>`;
+    }
+    return html;
+  }
+
+  function topTwoShare(rows) {
+    const agg = aggregateProducts(rows).sort((a, b) => b.revenue - a.revenue);
+    const total = agg.reduce((a, x) => a + x.revenue, 0);
+    const top = agg.slice(0, 2);
+    const share = total ? (top.reduce((a, x) => a + x.revenue, 0) / total) * 100 : 0;
+    return { top, total, share };
+  }
+
+  function renderHealth() {
+    document.getElementById("cashTitle").textContent = t("cashTitle");
+    document.getElementById("cashHint").textContent = t("cashHint");
+    document.getElementById("healthTitle").textContent = t("healthTitle");
+    const latest = state.summary[state.summary.length - 1];
+    if (!latest) return;
+
+    // --- cash and working capital ---
+    const cashByMonth = new Map(state.cash.map((c) => [c.month, c]));
+    const cashEl = document.getElementById("cashBody");
+    const cashLatest = cashByMonth.get(latest.month);
+    if (!state.cash.length || !cashLatest) {
+      cashEl.innerHTML = `<div class="empty-state">${t("cashNoData")}</div>`;
+    } else {
+      const wc = state.config.investment.workingCapitalFbu || 0;
+      const debtsPct = latest.revenue ? ((latest.receivables / latest.revenue) * 100).toFixed(1) : "0";
+      const turnPct = wc ? Math.round((latest.cogs / wc) * 100) : null;
+      let html = `<div class="cash-figures">`;
+      html += `<div>${t("cashIdleLabel")}: <strong>${fmtFBU(cashLatest.cash)}</strong><div class="pl-note">${dualUsd(cashLatest.cash)}</div></div>`;
+      html += `<div>${t("cashDebtsLabel")}: <strong>${fmtFBU(latest.receivables)}</strong> <span class="muted">(${t("cashDebtsPct", debtsPct)})</span><div class="pl-note">${dualUsd(latest.receivables)}</div></div>`;
+      html += `<div>${t("cashTurnoverLabel")}: <strong>${fmtFBU(latest.cogs)}</strong></div>`;
+      if (wc) html += `<div class="muted">${t("cashStartLabel")}: ${fmtFBU(wc)}. ${t("cashTurnoverPct", turnPct)}</div>`;
+      html += `</div><table class="ledger cash-table"><thead><tr><th>${t("cashColCycle")}</th><th class="num">${t("cashColCash")}</th><th class="num">${t("cashColDebts")}</th></tr></thead><tbody>`;
+      state.summary.forEach((r) => {
+        const c = cashByMonth.get(r.month);
+        html += `<tr><td>${r.month}</td><td class="num">${c ? fmtFBU(c.cash) : "-"}</td><td class="num">${fmtFBU(r.receivables)}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+      const cashNote = state.lang === "fr" ? (cashLatest.noteFr || cashLatest.note) : cashLatest.note;
+      if (cashNote) html += `<p class="muted cash-note">${t("cashNotePrefix")}: ${cashNote}</p>`;
+      cashEl.innerHTML = html;
+    }
+
+    // --- concentration + break-even ---
+    const warnPct = state.config.concentrationWarnPct || 50;
+    const lat = topTwoShare(state.products.filter((p) => p.month === latest.month));
+    const all = topTwoShare(state.products);
+    const parts = lat.top.map((x) => {
+      const tag = isOneOff(latest.month, x.translated.original) ? ` <span class="tag">${t("oneOffTag")}</span>` : "";
+      return `${renderTranslated(x.translated)}${tag} ${lat.total ? ((x.revenue / lat.total) * 100).toFixed(0) : 0}%`;
+    }).join(", ");
+    const warn = lat.share >= warnPct;
+    let html = `<div class="health-item ${warn ? "warn" : ""}"><div class="health-label">${t("concLabel")}</div>`;
+    html += `<div class="health-value">${lat.share.toFixed(0)}%</div>`;
+    html += `<div class="health-detail">${t("concDetail", latest.month, parts, all.share.toFixed(0))}</div>`;
+    html += `<div class="health-msg ${warn ? "" : "ok"}">${warn ? t("concWarn") : t("concOk")}</div></div>`;
+
+    const gm = latest.grossMargin / 100;
+    html += `<div class="health-item"><div class="health-label">${t("beLabel")}</div>`;
+    if (gm > 0) {
+      const be = latest.operating_expenses / gm;
+      html += `<div class="health-value">${fmtFBU(be)}</div>`;
+      html += `<div class="health-detail">${t("beDetail", fmtFBU(latest.operating_expenses), latest.grossMargin.toFixed(1))}</div>`;
+      html += `<div class="health-msg ${latest.revenue >= be ? "ok" : ""}">${latest.revenue >= be ? t("beSafety", (latest.revenue / be).toFixed(1), (((latest.revenue - be) / latest.revenue) * 100).toFixed(0)) : t("beBelow")}</div>`;
+    } else {
+      html += `<div class="health-value">-</div>`;
+    }
+    html += `<div class="health-detail">${t("beCaveat")}</div></div>`;
+    document.getElementById("healthBody").innerHTML = html;
+  }
+
+  function renderMarginRanking() {
+    const min = state.config.marginRankingMinRevenueFbu || 0;
+    document.getElementById("marginTitle").textContent = t("marginTitle");
+    document.getElementById("marginHint").textContent = t("marginHint", fmtFBU(min));
+    document.getElementById("mrColProduct").textContent = t("fpColProduct");
+    document.getElementById("mrColRevenue").textContent = t("fpColRevenue");
+    document.getElementById("mrColProfit").textContent = t("fpColProfit");
+    document.getElementById("mrColMargin").textContent = t("fpColMargin");
+    const agg = aggregateProducts(state.products);
+    const topTen = new Set(agg.slice().sort((a, b) => b.revenue - a.revenue).slice(0, 10).map((p) => p.key));
+    const shopMargin = aggregateSummary().grossMargin;
+    const rows = agg.filter((p) => p.revenue >= min).map((p) => ({ ...p, margin: (p.profit / p.revenue) * 100 })).sort((a, b) => b.margin - a.margin);
+    const tbody = document.querySelector("#marginTable tbody");
+    tbody.innerHTML = "";
+    if (!rows.length) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state">${t("noProducts")}</td></tr>`; return; }
+    rows.forEach((p, i) => {
+      const flag = topTen.has(p.key) && p.margin < shopMargin ? ` <span class="tag tag-warn">${t("marginBadge")}</span>` : "";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="rank">${i + 1}</td><td>${renderTranslated(p.translated)}${flag}</td><td class="num">${fmtFBU(p.revenue)}</td><td class="num">${fmtFBU(p.profit)}</td><td class="num">${p.margin.toFixed(1)}%</td>`;
+      tbody.appendChild(tr);
+    });
   }
 
   // ---------- Static UI text ----------
@@ -686,11 +882,11 @@
     document.getElementById(investedEl).textContent = fmtFBU(invested);
     document.getElementById(recoveredEl).textContent = fmtFBU(recovered);
     document.getElementById(remainingEl).textContent = fmtFBU(remaining);
-    const avgNet = state.summary.length ? state.summary.reduce((a, r) => a + r.netProfit, 0) / state.summary.length : 0;
     const etaElNode = document.getElementById(etaEl);
+    const pb = computePayback();
     if (remaining <= 0) etaElNode.textContent = t("etaRecovered");
-    else if (avgNet > 0) etaElNode.textContent = t("etaProjection", fmtFBU(avgNet), Math.ceil(remaining / avgNet));
-    else etaElNode.textContent = t("etaNoProgress");
+    else if (!pb || pb.avgMonths === null) etaElNode.textContent = t("etaNoProgress");
+    else etaElNode.innerHTML = paybackHtml(pb);
   }
 
   function renderProductsList(tableSel, rows, showTranslatedRankStartAt1) {
@@ -771,6 +967,7 @@
     const totalOpex = state.summary.reduce((a, r) => a + r.operating_expenses, 0);
     renderExpenseList("expenseList", "reconcileWarning", aggExpenses, totalOpex);
     renderHistory();
+    renderHealth();
   }
 
   function renderHistory() {
@@ -1016,6 +1213,7 @@
       });
     }
 
+    renderMarginRanking();
     const allRows = aggregateProducts(state.products).sort((a, b) => b.profit - a.profit);
     const tbody = document.querySelector("#fullProductsTable tbody");
     tbody.innerHTML = "";
@@ -1076,7 +1274,7 @@
     html += plRow("pl-line", t("plInvestment"), invested);
     html += plRow("pl-line", isAllTime ? t("plNetProfitToDate") : t("plNetProfitThisMonth"), summaryLike.revenue - summaryLike.cogs - summaryLike.operating_expenses);
     html += plRow("pl-line", t("plCumulativeProfit"), recovered);
-    html += `<tr class="pl-subtotal"><td>${t("plMonthsToRecover")}</td><td class="num">${monthsToRecover === null ? t("plNotApplicable") : monthsToRecover}</td></tr>`;
+    html += `<tr class="pl-subtotal"><td>${t("plMonthsToRecover")}</td><td class="num">${monthsToRecover === null ? t("plNotApplicable") : monthsToRecover > 0 && computePayback() && computePayback().bestMonths !== null ? t("paybackRange", computePayback().bestMonths, computePayback().cautiousMonths) : monthsToRecover}</td></tr>`;
 
     document.querySelector(tableSel + " tbody").innerHTML = html;
   }

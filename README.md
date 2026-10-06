@@ -9,82 +9,30 @@ database, no backend, just files you edit.
 
 ## How to update it every month
 
-You never touch the HTML or JS. You only edit the files in the `data/`
-folder. Do this straight on GitHub (works fine from your phone):
+Send the new monthly report to Claude. Claude reads it, adds the new cycle to the files in `data/`, checks the totals against the report, and pushes the update. GitHub Pages rebuilds the dashboard within a minute or two.
 
-1. Go to the file on GitHub (e.g. `data/summary.csv`) and tap the pencil
-   (edit) icon.
-2. Add a **new row** at the bottom for the new month. Don't edit old rows
-   unless you're fixing a mistake — the dashboard is built to keep every
-   month you've ever added.
-3. Tap "Commit changes." GitHub Pages rebuilds automatically within a
-   minute or two.
+You can also edit the files in `data/` yourself on GitHub (works from a phone). Add a new row at the bottom and do not change old rows unless you are fixing a mistake.
 
-That's it. The dashboard re-reads all rows every time it loads, so it
-automatically grows as you add months. You never have to touch a formula
-or a chart.
+### Data files
 
-### `data/summary.csv` — one row per month
-
-| column | what to put |
+| file | what it holds |
 |---|---|
-| `month` | A label like `August 2026`. This is what shows up everywhere. |
-| `revenue` | Total sales for the month, in FBU. |
-| `cogs` | Cost of the goods you sold (what you paid for the stock that sold), in FBU. |
-| `operating_expenses` | Rent, electricity, transport, etc. — everything that isn't cost of goods. |
-| `receivables` | Money owed to you that hasn't been collected yet, in FBU. |
-| `notes` | Anything you want to remember about that month (optional). |
+| `summary.csv` | One row per cycle: `month` (label), `revenue`, `cogs` (cost of goods sold), `operating_expenses`, `receivables`, `notes`. Profits and margins are calculated. |
+| `expenses.csv` | One row per expense per cycle: `month` (must match summary.csv), `category`, `amount`. |
+| `products.csv` | One row per sale line: `month`, `product`, `quantity`, `cost`, `revenue`, `profit`. The same product repeated is merged automatically. |
+| `cash.csv` | Cash on hand per cycle, as reported by the shop: `month`, `cash_on_hand`, `note`, `note_fr`. |
+| `initial_stock.csv` | The opening stock purchase (from the STOCK INITIAL sheet). |
+| `notes.csv` | What worked, what did not, actions, per cycle (optional). |
+| `config.json` | Exchange rates, total investment and equipment breakdown, one-off sales (`oneOffs`), the concentration warning level (`concentrationWarnPct`) and the minimum sales for the margin ranking (`marginRankingMinRevenueFbu`). |
+| `dictionary.json` | French/Kirundi to English translations (see below). |
 
-Gross profit, net profit, and margins are all calculated automatically —
-you never enter those directly.
+### What the dashboard checks for you
 
-### `data/expenses.csv` — as many rows as you need per month
-
-One row per expense category per month. Categories don't have to match
-month to month — some months you'll have a "Salaries" line, some you
-won't. Just add whatever categories that month actually had.
-
-| column | what to put |
-|---|---|
-| `month` | Must match a `month` label from summary.csv exactly. |
-| `category` | e.g. `Rent`, `Restocking`, `Electricity`, `Transport`. |
-| `amount` | In FBU. |
-
-Tip: the category amounts for a month should add up to that month's
-`operating_expenses` in summary.csv. If they don't, the dashboard shows a
-small warning so you can catch typos.
-
-### `data/products.csv` — as many rows as you need per month
-
-One row per product per month. Only list the products you want to track
-(you don't need every single item in the store — the ones that matter
-most to watch).
-
-| column | what to put |
-|---|---|
-| `month` | Must match a `month` label from summary.csv exactly. |
-| `product` | Product name, e.g. `Belle Saveur Water`. |
-| `revenue` | What it sold for that month, in FBU (optional but nice to have). |
-| `profit` | Profit from that product that month, in FBU. |
-
-### `data/config.json` — rarely changes
-
-Update this only when:
-- The exchange rate moves meaningfully.
-- You put more money into the business (update `totalInitialInvestmentFbu`).
-
-## Deploying to GitHub Pages
-
-1. Copy this whole `dashboard` folder into your
-   `personal-pro-avec-papa-nicky` repository (or wherever you want to host
-   it — you can rename the folder).
-2. In the repo, go to **Settings → Pages**, and set the source to the
-   branch and folder containing `index.html`.
-3. GitHub gives you a URL like
-   `https://irumvaa.github.io/personal-pro-avec-papa-nicky/` — bookmark it
-   on your phone and laptop.
-4. Every time you commit a change to a file in `data/`, the live page
-   updates automatically within a minute or two.
+- **Payback range**: best case (latest cycle's profit continues), all-time average, and a cautious case without the sales listed in `oneOffs`.
+- **Sales concentration**: share of sales from the top 2 products, with a warning above the level in `config.json`.
+- **Break-even sales**: operating costs divided by the gross margin.
+- **Cash and working capital**: cash on hand and debts to recover, per cycle.
+- **Margin ranking**: products ranked by margin, with high-volume, low-margin products marked.
 
 ### `data/dictionary.json` — the translation glossary
 
@@ -114,11 +62,3 @@ matter, the matcher normalizes them). The confidence level is one of:
 `"high"` (a clear translation), `"brand"` (a brand name kept as-is with
 a short description), `"medium"` or `"low"` (best guess — flagged in the
 dashboard so you know to double check it).
-
-## Removing the demo data
-
-The two "Demo - Month 1" / "Demo - Month 2" rows in the CSV files are
-placeholders so you can see the dashboard working and copy the exact
-format. Delete them once you've added your first real month — the
-dashboard shows a banner reminding you to do this as long as any row's
-month name contains "Demo".

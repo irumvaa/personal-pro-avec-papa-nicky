@@ -78,6 +78,20 @@
     <section>
       <div class="grid-2">
         <div class="panel">
+          <h3 id="cashTitle">Cash and working capital</h3>
+          <p class="muted panel-hint" id="cashHint"></p>
+          <div id="cashBody"></div>
+        </div>
+        <div class="panel">
+          <h3 id="healthTitle">Health checks</h3>
+          <div id="healthBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-2">
+        <div class="panel">
           <h3 id="productsTitle">Top products (all-time)</h3>
           <table class="ledger" id="productsTable">
             <thead>
@@ -286,6 +300,18 @@
         </thead>
         <tbody></tbody>
       </table>
+    </section>
+    <section>
+      <div class="panel">
+        <h3 id="marginTitle">Margin ranking</h3>
+        <p class="muted panel-hint" id="marginHint"></p>
+        <table class="ledger" id="marginTable">
+          <thead>
+            <tr><th></th><th id="mrColProduct">Product</th><th class="num" id="mrColRevenue">Sold for</th><th class="num" id="mrColProfit">Profit</th><th class="num" id="mrColMargin">Margin</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
     <section>
       <div class="panel">

@@ -469,3 +469,23 @@ footer {
   color: var(--ink-soft);
   font-size: 0.95rem;
 }
+
+/* ---- health checks, cash panel, payback range, margin ranking ---- */
+.panel-hint { margin: -4px 0 12px; font-size: 0.85rem; }
+.cash-figures > div { margin-bottom: 8px; }
+.cash-table { margin-top: 12px; }
+.cash-note { font-size: 0.82rem; margin-top: 10px; }
+.health-item { padding: 14px 0; border-top: 1px solid var(--paper-line); }
+.health-item:first-child { border-top: 0; padding-top: 0; }
+.health-label { font-size: 0.82rem; color: var(--ink-soft); }
+.health-value { font-family: var(--font-num); font-size: 1.6rem; font-weight: 600; color: var(--forest); }
+.health-item.warn .health-value { color: var(--clay-red); }
+.health-detail { font-size: 0.88rem; color: var(--ink-soft); margin-top: 2px; }
+.health-msg { font-size: 0.88rem; margin-top: 6px; color: var(--clay-red); }
+.health-msg.ok { color: var(--forest); }
+.tag { display: inline-block; font-size: 0.7rem; line-height: 1.4; padding: 0 7px; border-radius: 9px; border: 1px solid var(--marigold-deep); color: var(--marigold-deep); white-space: nowrap; font-family: var(--font-body); }
+.tag-warn { border-color: var(--clay-red); color: var(--clay-red); margin-left: 6px; }
+.payback-head { font-family: var(--font-num); font-weight: 600; font-size: 1.15rem; color: var(--forest); margin-bottom: 4px; }
+.payback-list { margin: 4px 0 0; padding-left: 18px; }
+.payback-list li { margin-bottom: 4px; }
+.payback-note { margin-top: 8px; font-size: 0.85rem; }
